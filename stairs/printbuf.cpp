@@ -15,7 +15,7 @@ char *printbuf(const char *format, ...)
   va_list args;
 
   va_start(args, format);
-  vsniprintf(_print_buffer, PRINT_BUFFER_SIZE, format, args);
+  vsnprintf(_print_buffer, PRINT_BUFFER_SIZE, format, args);
   va_end(args);
 
   return _print_buffer;
@@ -24,8 +24,14 @@ char *printbuf(const char *format, ...)
 // same as printbuf() but with already initialized va_list (used by dbg() func below)
 char *printbufva(const char *format, va_list args)
 {
-  vsniprintf(_print_buffer, PRINT_BUFFER_SIZE, format, args);
+  vsnprintf(_print_buffer, PRINT_BUFFER_SIZE, format, args);
   return _print_buffer;
+}
+
+// wrapper to usb_serial_write
+inline int usb_serial_print(const char *buffer)
+{
+  return usb_serial_write((const void *)buffer, strlen(buffer));
 }
 
 // also see dbg1/dbg2/dbg3 macros
@@ -41,11 +47,11 @@ void dbg(int level, const char *format, ...)
   va_list args;
 
   unsigned long now = millis();
-  Serial.print( printbuf("[%5lu.%03d] dbg%d: ", now/1000, (int)((now/1000.0 - now/1000) * 1000), level) );
+  usb_serial_print( printbuf("[%5lu.%03d] dbg%d: ", now/1000, (int)((now/1000.0 - now/1000) * 1000), level) );
   va_start(args, format);
-  Serial.print( printbufva(format, args) );
+  usb_serial_print( printbufva(format, args) );
   va_end(args);
-  Serial.print( "\r\n" );
+  usb_serial_print( "\r\n" );
 }
 
 

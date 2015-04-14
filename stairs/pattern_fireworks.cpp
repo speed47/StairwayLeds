@@ -8,7 +8,7 @@ void pattern_fireworks(void)
 {
   int color;
 
-  int steps = 1000;
+  int steps = 200;
   while (steps-- > 0)
   {
     digitalWrite(13, HIGH);

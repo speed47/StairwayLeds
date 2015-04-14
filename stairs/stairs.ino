@@ -21,7 +21,7 @@ config_t cfg;
 
 void setup()
 {
-  Serial.begin(9600); // useless with usb ?
+  asm(".global _printf_float");
   // pins setup
   pinMode(BOTTOM_MOTION_DETECTOR_PIN, INPUT);
   pinMode(TEENSY_LED_PIN, OUTPUT);
@@ -65,7 +65,9 @@ void loop()
       // the higher, the slower a worm can get. a number like 2 or 3 will burn your eyes
       int maxSlowness = 30;
       // motion detected
-      switch (random(1,5))
+      int chosen = random(1,5);
+      dbg1("MOTION DETECTED, chosen pattern: %d", chosen);
+      switch (chosen)
       {
         case 1:
           pattern_escalator();

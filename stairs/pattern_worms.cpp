@@ -27,7 +27,7 @@ void pattern_worms(int nbWorms, int wormsSections[], int wormsLength, int maxSlo
   }
 
   // main loop  
-  int steps = 1000;
+  int steps = 2000;
   while (steps-- > 0)
   {
     digitalWrite(13, HIGH);

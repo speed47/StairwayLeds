@@ -128,6 +128,7 @@ endif
 
 # linker options
 LDFLAGS = -Os -Wl,--gc-sections -mcpu=cortex-m4 -mthumb --specs=nano.specs -T$(LDSCRIPT) -Wl,-Map,$(TARGET).map
+#LDFLAGS = -Os -Wl,--gc-sections -mcpu=cortex-m4 -mthumb -T$(LDSCRIPT) -Wl,-Map,$(TARGET).map
 
 # additional libraries to link
 LIBS = -lm
@@ -172,6 +173,9 @@ reboot:
 	@-$(abspath $(TOOLSPATH))/teensy_reboot
 
 upload: post_compile reboot
+
+screen:
+	@while ! test -r /dev/ttyACM0 ; do echo -n . ; sleep 1 ; done ; screen /dev/ttyACM0
 
 $(BUILDDIR)/%.o: %.c
 	@/bin/echo -e "[CC]\t$<"
