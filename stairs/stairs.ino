@@ -4,6 +4,7 @@
 #include "printbuf.h"
 
 #include "pattern_escalator.h"
+#include "pattern_escalator_rainbow.h"
 #include "pattern_worms.h"
 #include "pattern_k2000.h"
 #include "pattern_fireworks.h"
@@ -65,10 +66,13 @@ void loop()
       // the higher, the slower a worm can get. a number like 2 or 3 will burn your eyes
       int maxSlowness = 30;
       // motion detected
-      int chosen = random(1,5);
+      int chosen = random(0,5);
       dbg1("MOTION DETECTED, chosen pattern: %d", chosen);
       switch (chosen)
       {
+        case 0:
+          pattern_escalator_rainbow();
+          break;
         case 1:
           pattern_escalator();
           break;

@@ -6,19 +6,15 @@
 
 void pattern_escalator_rainbow(void)
 {
-    const int mainLuminosity = 30;
-    const int glowLuminosity = 50;
-    const float glowSpeed = 1.5;
-    const int glowOften = 1;
-    
-    int glowHue;
-    int mainHue = random(0,360);
-    int triggerGlow = glowOften;
-    float flowPosition = 0;
-    boolean glowing = false;
-    
+    const int mainLuminosity = 40;
+    const int delayFirst = 1000 * 30;
+    const int delayLast  = 1000 / 10;
+
     unsigned long animationStart = millis();
     int phase = 1;
+    int shift = random(0,180);
+    int delay = delayFirst;
+    int delayStepPerLed = (delayFirst - delayLast) / (float)(NBLEDS * 2);
     while (1)
     {
       // in case of overflow
@@ -27,10 +23,19 @@ void pattern_escalator_rainbow(void)
       unsigned long elapsedTime = millis() - animationStart;
       float humanPosition = elapsedTime / 1000.0 * humanWalkingSpeed;
       float humanPositionLed = humanPosition * ledsPerMeter;
+      float humanPositionLedTotal = humanPositionLed + ((phase - 1) * NBLEDS);
+      delay = delayFirst - (int)(delayStepPerLed * humanPositionLedTotal);
+      if (delay < 0 || delay > 1000*1000)
+      {
+        delay = 0;
+      }
+
+      shift++;
       
       for (int i = 0; i < NBLEDS; i++)
       {
         int luminosity;
+        int hue = (shift + i) % 180;
         if (phase == 1)
         {
           if      (humanPositionLed <  i    ) { luminosity = 0; }
@@ -38,7 +43,7 @@ void pattern_escalator_rainbow(void)
           else
           {
             luminosity = mainLuminosity * (humanPositionLed - (int)humanPositionLed);
-            dbg3("phase=%d humanPositionLed=%.1f led.%d=%d", phase, humanPositionLed, i, luminosity);
+            dbg3("phase=%d humanPos=%.1f humanPosLedTot=%.1f humanPosLed=%.1f delay=%d led.%d=%d", phase, humanPosition, humanPositionLedTotal, humanPositionLed, delay, i, luminosity);
           }
         }
         else
@@ -48,29 +53,10 @@ void pattern_escalator_rainbow(void)
           else
           {
             luminosity = mainLuminosity * (humanPositionLed - (int)humanPositionLed);
-            dbg3("phase=%d humanPositionLed=%.1f led.%d=%d", phase, humanPositionLed, i, luminosity);
+            dbg3("phase=%d humanPos=%.1f humanPosLedTot=%.1f humanPosLed=%.1f delay=%d led.%d=%d", phase, humanPosition, humanPositionLedTotal, humanPositionLed, delay, i, luminosity);
           }
         }
-        leds.setPixel(LEDS_OFFSET + i, makeColor(mainHue, 100, luminosity));
-      }
-      
-      if (!glowing && triggerGlow-- < 0)
-      {
-        glowing = true;
-        flowPosition = NBLEDS;
-        glowHue = random(0,360);
-      }
-      
-      if (glowing && flowPosition < 0)
-      {
-        glowing = false;
-        triggerGlow = glowOften;
-      }
-      
-      if (glowing)
-      {
-        flowPosition -= glowSpeed;
-        leds.setPixel(LEDS_OFFSET +  (int)flowPosition, makeColor(glowHue, 100, glowLuminosity));
+        leds.setPixel(LEDS_OFFSET + i, makeColor( (hue * 7) % 180, 100, luminosity));
       }
       
       leds.show();
@@ -90,6 +76,8 @@ void pattern_escalator_rainbow(void)
         leds.show();
         break;
       }
+
+    delayMicroseconds(delay);
     }
 }
 
