@@ -148,8 +148,8 @@ LC_FILES := $(wildcard $(LIBRARYPATH)/*.c)
 LCPP_FILES := $(wildcard $(LIBRARYPATH)/*.cpp)
 TC_FILES := $(wildcard $(COREPATH)/*.c)
 TCPP_FILES := $(wildcard $(COREPATH)/*.cpp)
-C_FILES := $(wildcard $(SKETCHSRC)/*.c)
-CPP_FILES := $(wildcard $(SKETCHSRC)/*.cpp)
+C_FILES := $(wildcard $(SKETCHSRC)/*.c) 
+CPP_FILES := $(wildcard $(SKETCHSRC)/*.cpp) $(wildcard $(SKETCHSRC)/*/*.cpp)
 INO_FILES := $(wildcard $(SKETCHSRC)/*.ino)
 
 # include paths for libraries

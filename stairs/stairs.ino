@@ -3,8 +3,8 @@
 #include "makeColor.h"
 #include "printbuf.h"
 
-#include "pattern_escalator.h"
-#include "pattern_escalator_rainbow.h"
+#include "pattern/PatternEscalator.h"
+#include "pattern/PatternEscalatorRainbow.h"
 #include "pattern_worms.h"
 #include "pattern_k2000.h"
 #include "pattern_fireworks.h"
@@ -16,14 +16,11 @@ DMAMEM int displayMemory[NBLEDS*6];
 int drawingMemory[NBLEDS*6];
 OctoWS2811 leds(NBLEDS, displayMemory, drawingMemory, WS2811_GRB | WS2811_800kHz);
 
-const int ledsPerMeter = 60; // led density on led strip
-const float humanWalkingSpeed = 0.72; // meters/second;
 config_t cfg;
-
-PatternEscalator ptnEscalator;
 
 void setup()
 {
+  // enable %f and such
   asm(".global _printf_float");
   // pins setup
   pinMode(BOTTOM_MOTION_DETECTOR_PIN, INPUT);
@@ -32,6 +29,11 @@ void setup()
   digitalWrite(TEENSY_LED_PIN, LOW);
   // octows2811 setup
   leds.begin();
+  // patterns
+  int i = 0;
+  cfg.patterns[i++] = new PatternEscalator();
+  cfg.patterns[i++] = new PatternEscalatorRainbow();
+  // done
   dbg1("setup done");
 }
 
@@ -73,10 +75,8 @@ void loop()
       switch (chosen)
       {
         case 0:
-          pattern_escalator_rainbow();
-          break;
         case 1:
-          ptnEscalator.run();
+          cfg.patterns[chosen]->run();
           break;
         case 2:
           pattern_fireworks();

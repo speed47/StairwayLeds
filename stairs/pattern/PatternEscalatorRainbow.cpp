@@ -1,12 +1,21 @@
-#include "pattern_escalator.h"
+#include "PatternEscalatorRainbow.h"
 #include "Arduino.h"
 #include "globals.h"
 #include "makeColor.h"
 #include "printbuf.h"
 
-void pattern_escalator_rainbow(void)
+PatternEscalatorRainbow::PatternEscalatorRainbow(int mainLuminosity) :
+  mainLuminosity(mainLuminosity)
 {
-    const int mainLuminosity = 40;
+}
+
+PatternEscalatorRainbow::~PatternEscalatorRainbow()
+{
+}
+
+
+void PatternEscalatorRainbow::_animate()
+{
     const int delayFirst = 1000 * 30;
     const int delayLast  = 10;
 

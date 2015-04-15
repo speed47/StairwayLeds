@@ -1,5 +1,5 @@
 #include <limits.h>
-#include "pattern_escalator.h"
+#include "PatternEscalator.h"
 #include "Arduino.h"
 #include "globals.h"
 #include "makeColor.h"
@@ -10,10 +10,9 @@ PatternEscalator::PatternEscalator(int mainLuminosity, int glowLuminosity, float
 {
 }
 
-void PatternEscalator::run()
+PatternEscalator::~PatternEscalator()
 {
-  this->_randomize();
-  this->_animate();
+  delete this->mainHue;
 }
 
 void PatternEscalator::_randomize()

@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <time.h>
 #include <OctoWS2811.h>
+#include "pattern/Pattern.h"
 
 #ifndef GIT_REVISION
 # define GIT_REVISION none
@@ -36,8 +37,8 @@
 typedef struct
 {
   int debug_level;
-  // list of available generator functions
-  void (*generator[16])(void);
+  // list of available patterns
+  Pattern* patterns[16];
 } config_t;
 
 extern OctoWS2811 leds;
