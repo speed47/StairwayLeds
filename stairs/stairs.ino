@@ -20,6 +20,8 @@ const int ledsPerMeter = 60; // led density on led strip
 const float humanWalkingSpeed = 0.72; // meters/second;
 config_t cfg;
 
+PatternEscalator ptnEscalator;
+
 void setup()
 {
   asm(".global _printf_float");
@@ -74,7 +76,7 @@ void loop()
           pattern_escalator_rainbow();
           break;
         case 1:
-          pattern_escalator();
+          ptnEscalator.run();
           break;
         case 2:
           pattern_fireworks();

@@ -8,7 +8,7 @@ void pattern_escalator_rainbow(void)
 {
     const int mainLuminosity = 40;
     const int delayFirst = 1000 * 30;
-    const int delayLast  = 1000 / 10;
+    const int delayLast  = 10;
 
     unsigned long animationStart = millis();
     int phase = 1;

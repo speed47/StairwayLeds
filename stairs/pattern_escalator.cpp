@@ -1,18 +1,29 @@
+#include <limits.h>
 #include "pattern_escalator.h"
 #include "Arduino.h"
 #include "globals.h"
 #include "makeColor.h"
 #include "printbuf.h"
 
-void pattern_escalator(void)
+PatternEscalator::PatternEscalator(int mainLuminosity, int glowLuminosity, float glowSpeed, int glowOften, Randomizer *mainHue) :
+  mainLuminosity(mainLuminosity), glowLuminosity(glowLuminosity), glowSpeed(glowSpeed), glowOften(glowOften), mainHue(mainHue)
 {
-    const int mainLuminosity = 30;
-    const int glowLuminosity = 50;
-    const float glowSpeed = 1.5;
-    const int glowOften = 1;
-    
+}
+
+void PatternEscalator::run()
+{
+  this->_randomize();
+  this->_animate();
+}
+
+void PatternEscalator::_randomize()
+{
+  this->mainHue->randomize();
+}
+
+void PatternEscalator::_animate()
+{
     int glowHue;
-    int mainHue = random(0,360);
     int triggerGlow = glowOften;
     float flowPosition = 0;
     boolean glowing = false;
@@ -21,8 +32,8 @@ void pattern_escalator(void)
     int phase = 1;
     while (1)
     {
-      // in case of overflow
-      if (millis() < animationStart) { animationStart = 0; }
+      // in case of millis() overflow
+      if (millis() < animationStart) { animationStart = (ULONG_MAX - animationStart) + millis(); }
 
       unsigned long elapsedTime = millis() - animationStart;
       float humanPosition = elapsedTime / 1000.0 * humanWalkingSpeed;
@@ -51,7 +62,7 @@ void pattern_escalator(void)
             dbg3("phase=%d humanPositionLed=%.1f led.%d=%d", phase, humanPositionLed, i, luminosity);
           }
         }
-        leds.setPixel(LEDS_OFFSET + i, makeColor(mainHue, 100, luminosity));
+        leds.setPixel(LEDS_OFFSET + i, makeColor(this->mainHue->value, 100, luminosity));
       }
       
       if (!glowing && triggerGlow-- < 0)
