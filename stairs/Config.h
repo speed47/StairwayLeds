@@ -7,6 +7,7 @@ class Config
 {
   public:
     Pattern** patterns;
+    int nb();
 
     Config();
     ~Config();
@@ -14,7 +15,7 @@ class Config
     void addPattern(Pattern* newPattern);
 
   protected:
-    int nb;
+    int _nb;
 };
 
 

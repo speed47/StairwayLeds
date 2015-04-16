@@ -5,7 +5,7 @@
 Config::Config()
 {
   this->patterns = NULL;
-  this->nb = 0;
+  this->_nb = 0;
 }
 
 Config::~Config()
@@ -15,10 +15,15 @@ Config::~Config()
 
 void Config::addPattern(Pattern* newPattern)
 {
-  dbg3("addPattern: %d slots before", nb);
-  nb++;
-  this->patterns = (Pattern **)realloc(this->patterns, nb * sizeof(Pattern *));
-  this->patterns[nb-1] = newPattern;
-  dbg3("addPattern: %d slots after, last index: %p", nb, this->patterns[nb-1]);
+  dbg3("addPattern: %d slots before", _nb);
+  _nb++;
+  this->patterns = (Pattern **)realloc(this->patterns, _nb * sizeof(Pattern *));
+  this->patterns[_nb-1] = newPattern;
+  dbg3("addPattern: %d slots after (really: %d), last index: %p", _nb, sizeof(this->patterns), this->patterns[_nb-1]);
+}
+
+int Config::nb()
+{
+  return _nb;
 }
 

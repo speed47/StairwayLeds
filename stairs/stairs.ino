@@ -71,24 +71,23 @@ void loop()
       // the higher, the slower a worm can get. a number like 2 or 3 will burn your eyes
       int maxSlowness = 30;
       // motion detected
-      int chosen = random(0,6);
+      int chosen = random(0, cfg.nb() + 3);
       dbg1("MOTION DETECTED, chosen pattern: %d", chosen);
-      switch (chosen)
+      if (chosen < cfg.nb())
       {
-        case 0:
-        case 1:
-        case 2:
-          cfg.patterns[chosen]->run();
-          break;
-        case 5:
+        cfg.patterns[chosen]->run();
+      }
+      else if (chosen == cfg.nb())
+      {
           pattern_fireworks();
-          break;
-        case 3:
+      }
+      else if (chosen == cfg.nb()+1)
+      {
           pattern_k2000(hue, aLightness, sizeof(aLightness) / sizeof(aLightness[0]));
-          break;
-        case 4:
+      }
+      else if (chosen == cfg.nb()+2)
+      {
           pattern_worms(nbWorms, wormsSections, sizeof(wormsSections) / sizeof(wormsSections[0]), maxSlowness);
-          break;
       }
     }
 
