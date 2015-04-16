@@ -22,10 +22,10 @@ TEENSYDUINO = 122
 OPTIONS = -DUSB_SERIAL -DLAYOUT_US_ENGLISH
 
 # more speed at the cost of size
-#OPTIONS += -O2
+OPTIONS += -O2
 
 # less size at the cost of speed
-OPTIONS += -Os
+#OPTIONS += -Os
 
 # ------- stuff below shouldn't need to be modified -----------
 

@@ -1,5 +1,4 @@
 #include "globals.h"
-#include "stairs.h"
 #include "makeColor.h"
 #include "printbuf.h"
 #include "Config.h"

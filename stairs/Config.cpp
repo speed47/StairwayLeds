@@ -2,10 +2,8 @@
 #include "Config.h"
 #include "printbuf.h"
 
-Config::Config()
+Config::Config() : patterns(NULL), _nb(0)
 {
-  this->patterns = NULL;
-  this->_nb = 0;
 }
 
 Config::~Config()
@@ -19,7 +17,7 @@ void Config::addPattern(Pattern* newPattern)
   _nb++;
   this->patterns = (Pattern **)realloc(this->patterns, _nb * sizeof(Pattern *));
   this->patterns[_nb-1] = newPattern;
-  dbg3("addPattern: %d slots after (really: %d), last index: %p", _nb, sizeof(this->patterns), this->patterns[_nb-1]);
+  dbg3("addPattern: %d slots after, last index: %p", _nb, this->patterns[_nb-1]);
 }
 
 int Config::nb()
