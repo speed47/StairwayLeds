@@ -73,7 +73,8 @@ COMPILERPATH = $(TOOLSPATH)/arm/bin
 # Settings below this point usually do not need to be edited
 #************************************************************************
 
-GITREVISION = $(shell git log -n 1 --pretty=format:%h 2>/dev/null | echo unknown)
+GITREVISION = $(shell git log -n 1 --pretty=format:%h 2>/dev/null || echo unknown)
+GITBRANCH   = $(shell git branch | grep '*' | cut -d' ' -f2 || echo nobranch)
 GITDIRTYTMP = $(shell git diff 2>/dev/null | md5sum | cut -c1-8)
 BUILDTIME = $(shell date | sed -re 's/ /_/g')
 ifeq ($(GITDIRTYTMP), d41d8cd9)
@@ -87,6 +88,7 @@ CPPFLAGS = -Wall -Werror -g -mcpu=cortex-m4 -mthumb -nostdlib -fdata-sections -f
 CPPFLAGS += -DTIME_T=$(shell date +%s)
 CPPFLAGS += -DGIT_REVISION="$(GITREVISION)"
 CPPFLAGS += -DGIT_DIRTY="$(GITDIRTY)"
+CPPFLAGS += -DGIT_BRANCH="$(GITBRANCH)"
 CPPFLAGS += -DBUILD_TIME="$(BUILDTIME)"
 
 # compiler options for C++ only
@@ -202,7 +204,7 @@ $(BUILDDIR)/core.a: $(OBJS_CORE)
 
 %.hex: %.elf
 	@/bin/echo -e "[HEX]\t$@"
-	@/bin/echo -e "[REV]\tgit.$(GITREVISION).$(GITDIRTY)"
+	@/bin/echo -e "[REV]\tgit.$(GITREVISION).$(GITBRANCH).$(GITDIRTY)"
 	@$(SIZE) "$<" | awk '{ if (NR==2) { FLASH=$$1+$$2; RAM=$$2+$$3 } } END { printf "[FLASH]\t%6d/%6d (teensy30: %4.1f%%, teensy31: %4.1f%%)\n[RAM]\t%6d/%6d (teensy30: %4.1f%%, teensy31: %4.1f%%)\n", FLASH, $(FLASHSIZE), FLASH/$(FLASHSIZE30)*100, FLASH/$(FLASHSIZE31)*100, RAM, $(RAMSIZE), RAM/$(RAMSIZE30)*100, RAM/$(RAMSIZE31)*100 }'
 	@$(OBJCOPY) -O ihex -R .eeprom "$<" "$@"
 
