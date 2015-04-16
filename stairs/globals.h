@@ -34,18 +34,7 @@
 #define LEDS_OFFSET NBLEDS
 
 
-typedef struct
-{
-  int debug_level;
-  // list of available patterns
-  Pattern* patterns[16];
-} config_t;
-
 extern OctoWS2811 leds;
-
-extern config_t cfg;
-extern const int ledsPerMeter;
-extern const float humanWalkingSpeed;
 
 #endif
 

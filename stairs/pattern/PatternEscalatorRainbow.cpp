@@ -1,11 +1,12 @@
+#include <limits.h>
 #include "PatternEscalatorRainbow.h"
 #include "Arduino.h"
 #include "globals.h"
 #include "makeColor.h"
 #include "printbuf.h"
 
-PatternEscalatorRainbow::PatternEscalatorRainbow(int mainLuminosity) :
-  mainLuminosity(mainLuminosity)
+PatternEscalatorRainbow::PatternEscalatorRainbow(int mainLuminosity, int delayFirst, int delayLast, int hueMultiplier, float delayBetweenPhases) :
+  mainLuminosity(mainLuminosity), delayFirst(delayFirst), delayLast(delayLast), hueMultiplier(hueMultiplier), delayBetweenPhases(delayBetweenPhases)
 {
 }
 
@@ -16,9 +17,6 @@ PatternEscalatorRainbow::~PatternEscalatorRainbow()
 
 void PatternEscalatorRainbow::_animate()
 {
-    const int delayFirst = 1000 * 30;
-    const int delayLast  = 10;
-
     unsigned long animationStart = millis();
     int phase = 1;
     int shift = random(0,180);
@@ -26,8 +24,8 @@ void PatternEscalatorRainbow::_animate()
     int delayStepPerLed = (delayFirst - delayLast) / (float)(NBLEDS * 2);
     while (1)
     {
-      // in case of overflow
-      if (millis() < animationStart) { animationStart = 0; }
+      // in case of millis() overflow
+      if (millis() < animationStart) { animationStart = (ULONG_MAX - animationStart) + millis(); }
 
       unsigned long elapsedTime = millis() - animationStart;
       float humanPosition = elapsedTime / 1000.0 * humanWalkingSpeed;
@@ -58,14 +56,14 @@ void PatternEscalatorRainbow::_animate()
         else
         {
           if      (humanPositionLed >  i    ) { luminosity = 0; }
-          else if (humanPositionLed <= i + 1) { luminosity = mainLuminosity; }
+          else if (humanPositionLed <= i - 1) { luminosity = mainLuminosity; }
           else
           {
-            luminosity = mainLuminosity * (humanPositionLed - (int)humanPositionLed);
+            luminosity = mainLuminosity * (1 - (humanPositionLed - (int)humanPositionLed));
             dbg3("phase=%d humanPos=%.1f humanPosLedTot=%.1f humanPosLed=%.1f delay=%d led.%d=%d", phase, humanPosition, humanPositionLedTotal, humanPositionLed, delay, i, luminosity);
           }
         }
-        leds.setPixel(LEDS_OFFSET + i, makeColor( (hue * 7) % 180, 100, luminosity));
+        leds.setPixel(LEDS_OFFSET + i, makeColor( (hue * hueMultiplier) % 180, 100, luminosity));
       }
       
       leds.show();

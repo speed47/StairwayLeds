@@ -54,10 +54,10 @@ void PatternEscalator::_animate()
         else
         {
           if      (humanPositionLed >  i    ) { luminosity = 0; }
-          else if (humanPositionLed <= i + 1) { luminosity = mainLuminosity; }
+          else if (humanPositionLed <= i - 1) { luminosity = mainLuminosity; }
           else
           {
-            luminosity = mainLuminosity * (humanPositionLed - (int)humanPositionLed);
+            luminosity = mainLuminosity * (1 - (humanPositionLed - (int)humanPositionLed));
             dbg3("phase=%d humanPositionLed=%.1f led.%d=%d", phase, humanPositionLed, i, luminosity);
           }
         }

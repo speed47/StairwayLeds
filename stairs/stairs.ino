@@ -2,6 +2,7 @@
 #include "stairs.h"
 #include "makeColor.h"
 #include "printbuf.h"
+#include "Config.h"
 
 #include "pattern/PatternEscalator.h"
 #include "pattern/PatternEscalatorRainbow.h"
@@ -16,7 +17,7 @@ DMAMEM int displayMemory[NBLEDS*6];
 int drawingMemory[NBLEDS*6];
 OctoWS2811 leds(NBLEDS, displayMemory, drawingMemory, WS2811_GRB | WS2811_800kHz);
 
-config_t cfg;
+Config cfg;
 
 void setup()
 {
@@ -30,9 +31,9 @@ void setup()
   // octows2811 setup
   leds.begin();
   // patterns
-  int i = 0;
-  cfg.patterns[i++] = new PatternEscalator();
-  cfg.patterns[i++] = new PatternEscalatorRainbow();
+  cfg.addPattern(new PatternEscalator());
+  cfg.addPattern(new PatternEscalatorRainbow(20,   1*1000,     1000, 2, 1.0));
+  cfg.addPattern(new PatternEscalatorRainbow(30,  30*1000,        1, 7, 2.0));
   // done
   dbg1("setup done");
 }
@@ -70,15 +71,16 @@ void loop()
       // the higher, the slower a worm can get. a number like 2 or 3 will burn your eyes
       int maxSlowness = 30;
       // motion detected
-      int chosen = random(0,5);
+      int chosen = random(0,6);
       dbg1("MOTION DETECTED, chosen pattern: %d", chosen);
       switch (chosen)
       {
         case 0:
         case 1:
+        case 2:
           cfg.patterns[chosen]->run();
           break;
-        case 2:
+        case 5:
           pattern_fireworks();
           break;
         case 3:
