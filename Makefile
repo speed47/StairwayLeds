@@ -95,7 +95,7 @@ CPPFLAGS += -DBUILD_TIME="$(BUILDTIME)"
 CXXFLAGS = -std=gnu++0x -felide-constructors -fno-exceptions -fno-rtti
 
 # compiler options for C only
-CFLAGS =
+CFLAGS = -std=gnu99
 
 
 FLASHSIZE30=131072

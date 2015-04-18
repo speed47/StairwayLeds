@@ -1,7 +1,6 @@
 #include "globals.h"
 #include "makeColor.h"
 #include "printbuf.h"
-#include "Config.h"
 
 #include "pattern/PatternEscalator.h"
 #include "pattern/PatternEscalatorRainbow.h"
@@ -16,7 +15,12 @@ DMAMEM int displayMemory[NBLEDS*6];
 int drawingMemory[NBLEDS*6];
 OctoWS2811 leds(NBLEDS, displayMemory, drawingMemory, WS2811_GRB | WS2811_800kHz);
 
-Config cfg;
+// patterns
+Pattern *patterns[] = {
+  new PatternEscalator(),
+  new PatternEscalatorRainbow(20,   1*1000,     1000, 2, 1.0),
+  new PatternEscalatorRainbow(30,  30*1000,        1, 7, 2.0)
+};
 
 void setup()
 {
@@ -29,10 +33,6 @@ void setup()
   digitalWrite(TEENSY_LED_PIN, LOW);
   // octows2811 setup
   leds.begin();
-  // patterns
-  cfg.addPattern(new PatternEscalator());
-  cfg.addPattern(new PatternEscalatorRainbow(20,   1*1000,     1000, 2, 1.0));
-  cfg.addPattern(new PatternEscalatorRainbow(30,  30*1000,        1, 7, 2.0));
   // done
   dbg1("setup done");
 }
@@ -40,6 +40,7 @@ void setup()
 void loop()
 {
   int motionBottom, motionTop;
+  int nbpatterns = sizeof(patterns);
   while (1)
   {
     // power-on teensy led
@@ -70,21 +71,21 @@ void loop()
       // the higher, the slower a worm can get. a number like 2 or 3 will burn your eyes
       int maxSlowness = 30;
       // motion detected
-      int chosen = random(0, cfg.nb() + 3);
+      int chosen = random(0, nbpatterns + 3);
       dbg1("MOTION DETECTED, chosen pattern: %d", chosen);
-      if (chosen < cfg.nb())
+      if (chosen < nbpatterns)
       {
-        cfg.patterns[chosen]->run();
+        patterns[chosen]->run();
       }
-      else if (chosen == cfg.nb())
+      else if (chosen == nbpatterns)
       {
           pattern_fireworks();
       }
-      else if (chosen == cfg.nb()+1)
+      else if (chosen == nbpatterns+1)
       {
           pattern_k2000(hue, aLightness, sizeof(aLightness) / sizeof(aLightness[0]));
       }
-      else if (chosen == cfg.nb()+2)
+      else if (chosen == nbpatterns+2)
       {
           pattern_worms(nbWorms, wormsSections, sizeof(wormsSections) / sizeof(wormsSections[0]), maxSlowness);
       }
