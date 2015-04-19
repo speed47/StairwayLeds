@@ -16,7 +16,7 @@ protected:
     int _anchorColorActive;
     int _anchorNearColor;
     int _wayColor;
-    unsigned long interDelay; // ms
+    unsigned long _interDelay; // ms
 
     virtual void _animate();
 };
