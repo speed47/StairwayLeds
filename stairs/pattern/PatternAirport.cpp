@@ -1,32 +1,20 @@
 #include <limits.h>
-#include "PatternEscalator.h"
+#include "PatternAirport.h"
 #include "Arduino.h"
 #include "globals.h"
 #include "makeColor.h"
 #include "printbuf.h"
 
-PatternEscalator::PatternEscalator(int mainLuminosity, int glowLuminosity, float glowSpeed, int glowOften, Randomizer *mainHue) :
-  mainLuminosity(mainLuminosity), glowLuminosity(glowLuminosity), glowSpeed(glowSpeed), glowOften(glowOften), mainHue(mainHue)
+PatternAirport::PatternAirport(int anchorSpacing = 20, int anchorColorPassive = 0x1F1F1F, int anchorColorActive = 0xFFFFFF,
+  int anchorNearColor = 0x20CC20, int wayColor = 0x400000, unsigned long interDelay = 2000) :
+    _anchorSpacing(anchorSpacing), _anchorColorPassive(anchorColorPassive),
+    _anchorColorActive(anchorColorActive), _anchorNearColor(anchorNearColor),
+    _wayColor(wayColor), _interDelay(interDelay)
 {
 }
 
-PatternEscalator::~PatternEscalator()
+void PatternAirport::_animate()
 {
-  delete this->mainHue;
-}
-
-void PatternEscalator::_randomize()
-{
-  this->mainHue->randomize();
-}
-
-void PatternEscalator::_animate()
-{
-    int glowHue;
-    int triggerGlow = glowOften;
-    float flowPosition = 0;
-    boolean glowing = false;
-    
     int phase = 1;
     int humanPositionOffset = 0;
     while (!(phase == 2 && humanPositionLed > NBLEDS))
@@ -58,25 +46,6 @@ void PatternEscalator::_animate()
           }
         }
         leds.setPixel(LEDS_OFFSET + i, makeColor(this->mainHue->value, 100, luminosity));
-      }
-      
-      if (!glowing && triggerGlow-- < 0)
-      {
-        glowing = true;
-        flowPosition = NBLEDS;
-        glowHue = random(0,360);
-      }
-      
-      if (glowing && flowPosition < 0)
-      {
-        glowing = false;
-        triggerGlow = glowOften;
-      }
-      
-      if (glowing)
-      {
-        flowPosition -= glowSpeed;
-        leds.setPixel(LEDS_OFFSET +  (int)flowPosition, makeColor(glowHue, 100, glowLuminosity));
       }
       
       leds.show();
