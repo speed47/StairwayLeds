@@ -2,6 +2,7 @@
 #include "makeColor.h"
 #include "printbuf.h"
 
+#include "pattern/PatternPlain.h"
 #include "pattern/PatternEscalator.h"
 #include "pattern/PatternEscalatorRainbow.h"
 #include "pattern/PatternK2000.h"
@@ -21,6 +22,7 @@ int aLight[] = {1, 2, 4, 6, 15, 25, 35, 50};
 int wormsSections[] = { 1, 5, 10, 15, 9, 5, 4, 6, 7, 30 };
 
 Pattern *patterns[] = {
+  //new PatternPlain(0xFFFFFF, 5000),
   new PatternEscalator(),
   new PatternEscalatorRainbow(20,   1*1000,     1000, 2, 1.0),
   new PatternEscalatorRainbow(30,  30*1000,        1, 7, 2.0),
