@@ -1,4 +1,6 @@
-# cmd used: ./configure -t 31 -f 48 -p /home/speed/arduino -d 1 -r -45
+###############################################################
+###### VALUES BELOW NEED TO BE MODIFIED FOR YOUR PROJECT ######
+
 # The name of your project (used to name the compiled .hex file)
 TARGET = StairwayLeds
 
@@ -14,12 +16,8 @@ TEENSY = 31
 # Set to 24000000, 48000000, or 96000000 to set CPU core speed
 TEENSY_CORE_SPEED = 96000000
 
-# Some libraries will require this to be defined
-ARDUINO = 162
-TEENSYDUINO = 122
-
 # configurable options
-OPTIONS = -DUSB_SERIAL -DLAYOUT_US_ENGLISH
+OPTIONS = -DUSB_SERIAL -DLAYOUT_US_ENGLISH -DUSING_MAKEFILE
 
 # more speed at the cost of size (has sometimes adverse effects!!)
 #OPTIONS += -O2
@@ -27,6 +25,8 @@ OPTIONS = -DUSB_SERIAL -DLAYOUT_US_ENGLISH
 # less size at the cost of speed
 OPTIONS += -Os
 
+###############################################################
+###############################################################
 # ------- stuff below shouldn't need to be modified -----------
 
 #************************************************************************
@@ -39,7 +39,6 @@ OPTIONS += -Os
 BUILDDIR = $(abspath $(CURDIR)/build)
 
 # path location for Teensy Loader, teensy_post_compile and teensy_reboot
-#TOOLSPATH = $(CURDIR)/tools
 TOOLSPATH = $(ARDUINOPATH)/hardware/tools
 
 ifeq ($(OS),Windows_NT)
@@ -52,14 +51,7 @@ else
 endif
 
 # path location for Teensy 3 core
-have_avr_in_path = $(wildcard $(ARDUINOPATH)/hardware/teensy/avr/cores/teensy3) 
-ifeq ($(strip $(have_avr_in_path)),)
-  # .. for arduino 1.0.x
-  COREPATH = $(ARDUINOPATH)/hardware/teensy/cores/teensy3
-else
-  # .. for arduino 1.6.x
-  COREPATH = $(ARDUINOPATH)/hardware/teensy/avr/cores/teensy3
-endif
+COREPATH = $(shell find $(ARDUINOPATH) -type d -name teensy3)
 
 # path location for Arduino libraries
 LIBRARYPATH = $(COREPATH)/../../libraries/OctoWS2811
@@ -68,6 +60,12 @@ LIBRARYPATH = $(COREPATH)/../../libraries/OctoWS2811
 #COMPILERPATH = $(TOOLSPATH)/arm-none-eabi/bin
 COMPILERPATH = $(TOOLSPATH)/arm/bin
 #arm/bin
+
+# Some libraries will require those two to be defined
+# arduino version
+ARDUINO = $(shell grep ^version= $(ARDUINOPATH)/hardware/arduino/avr/platform.txt | sed -re 's/[^0-9]//g')
+# teensyduino version
+TEENSYDUINO = $(shell sed -re 's/[^0-9]//g' $(ARDUINOPATH)/lib/teensyduino.txt)
 
 #************************************************************************
 # Settings below this point usually do not need to be edited
@@ -136,7 +134,12 @@ LDFLAGS = -Os -Wl,--gc-sections -mcpu=cortex-m4 -mthumb --specs=nano.specs -T$(L
 LIBS = -lm
 
 # gcc filter
-GCCFILTER = gccfilter -c
+GCCFILTER = $(shell which gccfilter)
+ifeq ($(GCCFILTER),)
+	GCCFILTER=
+else
+	GCCFILTER += -c
+endif
 
 # names for the compiler programs
 CC = $(GCCFILTER) $(abspath $(COMPILERPATH))/arm-none-eabi-gcc

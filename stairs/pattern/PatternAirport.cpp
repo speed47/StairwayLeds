@@ -21,6 +21,7 @@ void PatternAirport::_animate()
     float humanPositionOffset = 0;
     bool anchorActive = true;
     unsigned long anchorLastSwitchTime = 0;
+    unsigned long lastPhaseChange = 0;
     while (1)
     {
       float humanPosition = (this->elapsed() / 1000.0 * _humanWalkingSpeed) - humanPositionOffset;
@@ -39,16 +40,18 @@ void PatternAirport::_animate()
       // first, normal way
       for (int i = 0; i < NBLEDS; i++)
       {
-        int color;
+        int color = 0;
         if (phase == 1)
         {
-          if      (humanPositionLed <= i    ) { color = 0; }
-          else if (humanPositionLed >= i + 1) { color = _wayColor; }
+          if (humanPositionLed >= i + 1) { color = _wayColor; }
         }
-        else
+        else if (phase == 2)
         {
-          if      (humanPositionLed >= i    ) { color = 0; }
-          else if (humanPositionLed <= i - 1) { color = _wayColor; }
+          color = _wayColor;
+        }
+        else if (phase == 3)
+        {
+          if (humanPositionLed <= i - 1) { color = _wayColor; }
         }
         leds.setPixel(LEDS_OFFSET + i, color);
       }
@@ -77,11 +80,18 @@ void PatternAirport::_animate()
       if (phase == 1 && humanPositionLed > NBLEDS)
       {
         phase = 2;
-        humanPositionOffset = (NBLEDS / (float)_ledsPerMeter);
-        delay(_delayBetweenPhases);
+        humanPositionOffset = humanPosition;
+        lastPhaseChange = this->elapsed();
       }
-
-      else if (phase == 2 && humanPositionLed > NBLEDS)
+      else if (phase == 2)
+      {
+        if (this->elapsed() - lastPhaseChange > _delayBetweenPhases)
+        {
+          phase = 3;
+          humanPositionOffset = humanPosition;
+        }
+      }
+      else if (phase == 3 && humanPositionLed > NBLEDS)
       {
         break;
       }
