@@ -10,11 +10,11 @@ public:
     PatternEscalatorRainbow(int mainLuminosity=30, int delayFirst=100*1000, int delayLast=0, int hueMultiplier=7, float delayBetweenPhases=2.0);
 
 protected:
-    int mainLuminosity;
-    int delayFirst;
-    int delayLast;
-    int hueMultiplier;
-    float delayBetweenPhases;
+    int _mainLuminosity;
+    int _delayFirst;
+    int _delayLast;
+    int _hueMultiplier;
+    float _delayBetweenPhases;
 
     virtual void _animate();
 };
