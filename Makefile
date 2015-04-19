@@ -209,7 +209,8 @@ $(BUILDDIR)/core.a: $(OBJS_CORE)
 	@$(OBJCOPY) -O ihex -R .eeprom "$<" "$@"
 
 # compiler generated dependency info
--include $(OBJS:.o=.d)
+-include $(OBJS_SKETCH:.o=.d)
+-include $(OBJS_CORE:.o=.d)
 
 clean:
 	@echo "Cleaning sketch build (use distclean to clean teensy lib objects too)..."
