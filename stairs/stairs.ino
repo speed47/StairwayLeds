@@ -27,7 +27,16 @@ Pattern *patterns[] = {
   new PatternK2000(HUE_RED, aLight, sizeof(aLight) / sizeof(aLight[0])),
   new PatternWorms(NBLEDS / 20, wormsSections, sizeof(wormsSections) / sizeof(wormsSections[0]), 30),
   new PatternFireworks(),
-  new PatternAirport()
+  new PatternAirport(
+    /*anchorSpacing*/ 20,
+    /*anchorPassiveColor*/ 0x111111,
+    /*anchorActiveColor*/  0xFFFFFF,
+    /*anchorActiveDuration*/  100,
+    /*anchorPassiveDuration*/ 600,
+    /*anchorNearColor*/ makeColor(HUE_GREEN, 100, 16),
+    /*wayColor*/        makeColor(HUE_RED,   100, 4),   
+    /*interDelay*/      2000 //TODO
+  )
 };
 
 void setup()
