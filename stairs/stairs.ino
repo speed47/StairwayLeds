@@ -18,7 +18,7 @@ int drawingMemory[NBLEDS*6];
 OctoWS2811 leds(NBLEDS, displayMemory, drawingMemory, WS2811_GRB | WS2811_800kHz);
 
 // patterns
-int aLight[] = {1, 2, 4, 6, 15, 25, 35, 50};
+int chase[] = {1, 2, 4, 6, 15, 25, 35, 50};
 int wormsSections[] = { 1, 5, 10, 15, 9, 5, 4, 6, 7, 30 };
 
 Pattern *patterns[] = {
@@ -26,7 +26,13 @@ Pattern *patterns[] = {
   new PatternEscalator(),
   new PatternEscalatorRainbow(20,   1*1000,     1000, 2, 1.0),
   new PatternEscalatorRainbow(30,  30*1000,        1, 7, 2.0),
-  new PatternK2000(HUE_RED, aLight, sizeof(aLight) / sizeof(aLight[0])),
+  new PatternK2000(
+    /*chase*/ chase,
+    /*chaseLen*/ sizeof(chase) / sizeof(chase[0]),
+    /*duration*/ 5000,
+    /*delay*/ 4,
+    /*hueStep*/ 3
+  ),
   new PatternWorms(NBLEDS / 20, wormsSections, sizeof(wormsSections) / sizeof(wormsSections[0]), 30),
   new PatternFireworks(),
   new PatternAirport(

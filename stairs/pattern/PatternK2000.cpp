@@ -5,41 +5,34 @@
 #include "makeColor.h"
 #include "printbuf.h"
 
-PatternK2000::PatternK2000(int baseHue, int* aLight, int aLightLen) :
-  baseHue(baseHue), aLight(aLight), aLightLen(aLightLen)
+PatternK2000::PatternK2000(int *chase, int _chaseLen, unsigned int duration, unsigned int delay, int hueStep) :
+  _chase(chase), _chaseLen(_chaseLen), _duration(duration), _delay(delay), _hueStep(hueStep)
 {
 }
 
 void PatternK2000::_animate()
 {
   int currentDirection = 1;
-  int length = aLightLen;
-  int k[length];
+  int hue = random(0, 361);
+  int k[_chaseLen];
 
   // setup the head and tail  
-  for (int i = 0; i < length; i++)
+  for (int i = 0; i < _chaseLen; i++)
   {
     k[i] = i;
   }
-  // start clean with black leds
-  /*
-  for (int led = 0; led < NBLEDS; led++)
-   {
-    leds.setPixel(LEDS_OFFSET + led, 0); // all leds are black by default
-  }*/
   
-  int steps = 1000;
-  while (steps-- > 0)
+  while (this->elapsed() < _duration)
   {
-    baseHue = baseHue + 3 % 360;
-    digitalWrite(13, HIGH);
+    digitalWrite(TEENSY_LED_PIN, HIGH);
+    hue = hue + _hueStep % 360;
     // reverse direction if we're at the top
-    if (k[length-1] >= NBLEDS - 1)
+    if (k[_chaseLen-1] >= NBLEDS - 1)
     {
       currentDirection = -1; // down
     }
     // reverse direction if we're at the bottom
-    else if (k[length-1] <= 0)
+    else if (k[_chaseLen-1] <= 0)
     {
       currentDirection = 1; // up
     }
@@ -50,24 +43,24 @@ void PatternK2000::_animate()
     leds.setPixel(LEDS_OFFSET + k[0], 0);
     
     // advance the tail
-    for (int i = 0; i < length - 1; i++)
+    for (int i = 0; i < _chaseLen - 1; i++)
     {
       k[i] = k[i+1];
     }
     // and set the head
-    k[length-1] += currentDirection;
+    k[_chaseLen-1] += currentDirection;
     
     // set the colors now, from tail to head
     // because the head must always have the last word
-    for (int i = 0; i < length; i++)
+    for (int i = 0; i < _chaseLen; i++)
     {
-      leds.setPixel(LEDS_OFFSET + k[i], makeColor(baseHue, 100, aLight[i]));
+      leds.setPixel(LEDS_OFFSET + k[i], makeColor(hue, 100, _chase[i]));
     }
     
     // now display
     leds.show();
-    digitalWrite(13, LOW);
-    delayMicroseconds(1000*5);
+    digitalWrite(TEENSY_LED_PIN, LOW);
+    delayMicroseconds(1000 * _delay);
   }
 }
   

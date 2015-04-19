@@ -78,6 +78,7 @@ void PatternAirport::_animate()
       {
         phase = 2;
         humanPositionOffset = (NBLEDS / (float)_ledsPerMeter);
+        delay(_interDelay);
       }
 
       else if (phase == 2 && humanPositionLed > NBLEDS)
