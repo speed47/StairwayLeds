@@ -53,14 +53,18 @@ void PatternAirport::_animate()
         {
           // this is an anchor, active or passive ?
           color = anchorActive ? _anchorActiveColor : _anchorPassiveColor;
-          // also set -1 and +1 pixels (if not out of bounds)
-          if (i - 1 >= 0)
+          // when passive, also sometimes
+          // set -1 and +1 pixels (if not out of bounds)
+          if (!anchorActive)
           {
-            leds.setPixel(LEDS_OFFSET + i - 1, _anchorNearColor);
-          }
-          if (i + 1 < NBLEDS)
-          {
-            leds.setPixel(LEDS_OFFSET + i + 1, _anchorNearColor);
+            if (anchorLastSwitchTime >= 100 && anchorLastSwitchTime < 200 && i - 1 >= 0)
+            {
+              leds.setPixel(LEDS_OFFSET + i - 1, _anchorNearColor);
+            }
+            if (anchorLastSwitchTime >= 200 && anchorLastSwitchTime < 300 && i + 1 < NBLEDS)
+            {
+              leds.setPixel(LEDS_OFFSET + i + 1, _anchorNearColor);
+            }
           }
         }
         leds.setPixel(LEDS_OFFSET + i, color);
