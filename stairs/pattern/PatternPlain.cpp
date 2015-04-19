@@ -11,13 +11,12 @@ PatternPlain::PatternPlain(int color, unsigned int duration) : _color(color), _d
 
 void PatternPlain::_animate()
 {
-  while (this->elapsed() < _duration)
+  for (int i = 0; i < NBLEDS; i++)
   {
-    for (int i = 0; i < NBLEDS; i++)
-    {
-      leds.setPixel(LEDS_OFFSET + i, _color);
-    }
-    leds.show();
+    leds.setPixel(LEDS_OFFSET + i, _color);
   }
+  leds.show();
+  digitalWrite(TEENSY_LED_PIN, LOW);
+  delay(_duration);
 }
   
