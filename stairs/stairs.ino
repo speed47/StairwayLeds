@@ -71,7 +71,8 @@ void loop()
     // poweroff led, and wait 100ms before polling again
     digitalWrite(TEENSY_LED_PIN, LOW);
     // just to get better pseudo random numbers when we need those:
-    rand(); // FIXME will get optimized out, how to avoid that ?
+    rand();
+    // and sleep before polling for motion again
     delayMicroseconds(1000 * 100);
   }
 }
