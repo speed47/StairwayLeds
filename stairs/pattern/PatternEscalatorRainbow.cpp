@@ -17,19 +17,15 @@ PatternEscalatorRainbow::~PatternEscalatorRainbow()
 
 void PatternEscalatorRainbow::_animate()
 {
-    unsigned long animationStart = millis();
     int phase = 1;
+    int humanPositionOffset = 0;
     int shift = random(0,180);
     int delay = delayFirst;
     int delayStepPerLed = (delayFirst - delayLast) / (float)(NBLEDS * 2);
     while (1)
     {
-      // in case of millis() overflow
-      if (millis() < animationStart) { animationStart = (ULONG_MAX - animationStart) + millis(); }
-
-      unsigned long elapsedTime = millis() - animationStart;
-      float humanPosition = elapsedTime / 1000.0 * humanWalkingSpeed;
-      float humanPositionLed = humanPosition * ledsPerMeter;
+      float humanPosition = (this->elapsed() / 1000.0 * _humanWalkingSpeed) - humanPositionOffset;;
+      float humanPositionLed = humanPosition * _ledsPerMeter;
       float humanPositionLedTotal = humanPositionLed + ((phase - 1) * NBLEDS);
       delay = delayFirst - (int)(delayStepPerLed * humanPositionLedTotal);
       if (delay < 0 || delay > 1000*1000)
@@ -71,7 +67,7 @@ void PatternEscalatorRainbow::_animate()
       if (phase == 1 && humanPositionLed > NBLEDS)
       {
         phase = 2;
-        animationStart = millis();
+        humanPositionOffset = NBLEDS * _ledsPerMeter;
       }
       
       else if (phase == 2 && humanPositionLed > NBLEDS)

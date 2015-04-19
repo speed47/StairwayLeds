@@ -5,26 +5,33 @@
 #include "makeColor.h"
 #include "printbuf.h"
 
+PatternFireworks::PatternFireworks(int probability, unsigned int delay, unsigned long duration) :
+  _probability(probability), _delay(delay), _duration(duration)
+{
+  if (probability < 1)
+  {
+    dbg1("PatternFireworks ctor: adjusting given probability (%d) to 1", probability);
+    _probability = 1;
+  }
+}
+
 void PatternFireworks::_animate()
 {
-  int color;
-
-  int steps = 200;
-  while (steps-- > 0)
+  while (this->elapsed() < this->_duration)
   {
-    digitalWrite(13, HIGH);
+    digitalWrite(TEENSY_LED_PIN, HIGH);
     for (int led = 0; led < NBLEDS; led++)
     {
-      color = 0;
-      if (random(0,10) >= 9)
+      int color = 0;
+      if (random(0, this->_probability) >= this->_probability - 1)
       {
-        color = makeColor(rand(), 100, random(1,51));
+        color = makeColor(random(0,361), 100, random(1,51));
       }
       leds.setPixel(LEDS_OFFSET + led, color);
     }
     leds.show();
-    digitalWrite(13, LOW);
-    delayMicroseconds(1000*15);
+    digitalWrite(TEENSY_LED_PIN, LOW);
+    delayMicroseconds(1000 * this->_delay);
   }
 }
 

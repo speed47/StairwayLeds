@@ -6,14 +6,17 @@ class Pattern
 public:
     Pattern(int ledsPerMeter = 60, float humanWalkingSpeed = 0.72);
     ~Pattern();
-    virtual void run();
+
+    unsigned long elapsed(); // returns ms since animation started
+    virtual void run(); // main func
 
 protected:
     virtual void _randomize();
-    virtual void _animate() = 0; // pure virtual
+    virtual void _animate() = 0; // pure virtual, must be defined in child
 
-    int ledsPerMeter;
-    float humanWalkingSpeed;
+    int _ledsPerMeter;
+    float _humanWalkingSpeed;
+    unsigned long _animationStart;
 };
 
 #endif

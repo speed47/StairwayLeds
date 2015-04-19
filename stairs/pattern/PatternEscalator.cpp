@@ -27,16 +27,12 @@ void PatternEscalator::_animate()
     float flowPosition = 0;
     boolean glowing = false;
     
-    unsigned long animationStart = millis();
     int phase = 1;
+    int humanPositionOffset = 0;
     while (1)
     {
-      // in case of millis() overflow
-      if (millis() < animationStart) { animationStart = (ULONG_MAX - animationStart) + millis(); }
-
-      unsigned long elapsedTime = millis() - animationStart;
-      float humanPosition = elapsedTime / 1000.0 * humanWalkingSpeed;
-      float humanPositionLed = humanPosition * ledsPerMeter;
+      float humanPosition = (this->elapsed() / 1000.0 * _humanWalkingSpeed) - humanPositionOffset;
+      float humanPositionLed = humanPosition * _ledsPerMeter;
       
       for (int i = 0; i < NBLEDS; i++)
       {
@@ -88,7 +84,7 @@ void PatternEscalator::_animate()
       if (phase == 1 && humanPositionLed > NBLEDS)
       {
         phase = 2;
-        animationStart = millis();
+        humanPositionOffset = NBLEDS * _ledsPerMeter;
       }
       
       else if (phase == 2 && humanPositionLed > NBLEDS)
