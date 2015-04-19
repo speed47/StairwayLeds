@@ -10,11 +10,6 @@ PatternEscalatorRainbow::PatternEscalatorRainbow(int mainLuminosity, int delayFi
 {
 }
 
-PatternEscalatorRainbow::~PatternEscalatorRainbow()
-{
-}
-
-
 void PatternEscalatorRainbow::_animate()
 {
     int phase = 1;
