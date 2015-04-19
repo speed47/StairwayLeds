@@ -56,22 +56,17 @@ void loop()
     motionTop    = 0;//analogRead(   TOP_MOTION_DETECTOR_PIN);
 
     dbg2("motion sensor: %d", motionBottom);
-    if (motionBottom < MOTION_DETECTION_THRESHOLD && motionTop < MOTION_DETECTION_THRESHOLD)
-    {
-      // no motion detected, shut everything off
-      for (int i = 0; i < NBLEDS; i++)
-      {
-        leds.setPixel(LEDS_OFFSET + i, 0x000000);
-      }
-      leds.show();
-    }
-    else
+    if (motionBottom > MOTION_DETECTION_THRESHOLD || motionTop > MOTION_DETECTION_THRESHOLD)
     {
       // motion detected
       int chosen = random(0, nbpatterns);
       dbg1("MOTION DETECTED, chosen pattern: %d", chosen);
       patterns[chosen]->run();
     }
+
+    // shut all strips off
+    ledsClear();
+    leds.show();
 
     // poweroff led, and wait 100ms before polling again
     digitalWrite(TEENSY_LED_PIN, LOW);
