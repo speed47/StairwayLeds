@@ -13,7 +13,7 @@ PatternEscalatorRainbow::PatternEscalatorRainbow(int mainLuminosity, int delayFi
 void PatternEscalatorRainbow::_animate()
 {
     int phase = 1;
-    int humanPositionOffset = 0;
+    float humanPositionOffset = 0;
     int shift = random(0,180);
     int delay = _delayFirst;
     int delayStepPerLed = (_delayFirst - _delayLast) / (float)(NBLEDS * 2);
@@ -62,16 +62,11 @@ void PatternEscalatorRainbow::_animate()
       if (phase == 1 && humanPositionLed > NBLEDS)
       {
         phase = 2;
-        humanPositionOffset = NBLEDS * _ledsPerMeter;
+        humanPositionOffset = (NBLEDS / (float)_ledsPerMeter);
       }
-      
+
       else if (phase == 2 && humanPositionLed > NBLEDS)
       {
-        for (int i = 0; i < NBLEDS; i++)
-        {
-          leds.setPixel(LEDS_OFFSET + i, 0);
-        }
-        leds.show();
         break;
       }
 

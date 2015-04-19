@@ -30,13 +30,13 @@ Pattern *patterns[] = {
   new PatternWorms(NBLEDS / 20, wormsSections, sizeof(wormsSections) / sizeof(wormsSections[0]), 30),
   new PatternFireworks(),
   new PatternAirport(
-    /*anchorSpacing*/ 20,
+    /*anchorSpacing*/ 15,
     /*anchorPassiveColor*/ 0x111111,
     /*anchorActiveColor*/  0xFFFFFF,
     /*anchorActiveDuration*/  100,
     /*anchorPassiveDuration*/ 600,
-    /*anchorNearColor*/ makeColor(HUE_GREEN, 100, 16),
-    /*wayColor*/        makeColor(HUE_RED,   100, 4),   
+    /*anchorNearColor*/ 0x003000,
+    /*wayColor*/        makeColor(HUE_RED,   100, 1),   
     /*interDelay*/      2000 //TODO
   )
 };
@@ -52,6 +52,8 @@ void setup()
   digitalWrite(TEENSY_LED_PIN, LOW);
   // octows2811 setup
   leds.begin();
+  // patterns
+  dbg1("got %d different patterns", sizeof(patterns) / sizeof(patterns[0]));
   // done
   dbg1("setup done");
 }
@@ -59,7 +61,7 @@ void setup()
 void loop()
 {
   int motionBottom, motionTop;
-  int nbpatterns = sizeof(patterns);
+  int nbpatterns = sizeof(patterns) / sizeof(patterns[0]);
   while (1)
   {
     // power-on teensy led
