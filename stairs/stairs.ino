@@ -6,7 +6,7 @@
 #include "pattern/PatternEscalatorRainbow.h"
 #include "pattern/PatternK2000.h"
 #include "pattern/PatternWorms.h"
-#include "pattern_fireworks.h"
+#include "pattern/PatternFireworks.h"
 
 #include <OctoWS2811.h>
 
@@ -24,7 +24,8 @@ Pattern *patterns[] = {
   new PatternEscalatorRainbow(20,   1*1000,     1000, 2, 1.0),
   new PatternEscalatorRainbow(30,  30*1000,        1, 7, 2.0),
   new PatternK2000(HUE_RED, aLight, sizeof(aLight) / sizeof(aLight[0])),
-  new PatternWorms(NBLEDS / 20, wormsSections, sizeof(wormsSections) / sizeof(wormsSections[0]), 30)
+  new PatternWorms(NBLEDS / 20, wormsSections, sizeof(wormsSections) / sizeof(wormsSections[0]), 30),
+  new PatternFireworks()
 };
 
 void setup()
@@ -67,22 +68,15 @@ void loop()
     else
     {
       // motion detected
-      int chosen = random(0, nbpatterns + 1);
-
+      int chosen = random(0, nbpatterns);
       dbg1("MOTION DETECTED, chosen pattern: %d", chosen);
-      if (chosen < nbpatterns)
-      {
-        patterns[chosen]->run();
-      }
-      else if (chosen == nbpatterns)
-      {
-          pattern_fireworks();
-      }
+      patterns[chosen]->run();
     }
 
     // poweroff led, and wait 100ms before polling again
     digitalWrite(TEENSY_LED_PIN, LOW);
-    rand(); // just to get better pseudo random numbers when we need those
+    // just to get better pseudo random numbers when we need those:
+    rand(); // FIXME will get optimized out, how to avoid that ?
     delayMicroseconds(1000 * 100);
   }
 }

@@ -1,10 +1,11 @@
-#include "pattern_fireworks.h"
+#include <limits.h>
+#include "PatternFireworks.h"
 #include "Arduino.h"
 #include "globals.h"
 #include "makeColor.h"
 #include "printbuf.h"
 
-void pattern_fireworks(void)
+void PatternFireworks::_animate()
 {
   int color;
 
