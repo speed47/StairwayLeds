@@ -5,8 +5,8 @@
 #include "makeColor.h"
 #include "printbuf.h"
 
-PatternWorms::PatternWorms(int nbWorms, int *wormsSections, int wormsSectionsLen, int maxSlowness) :
-  nbWorms(nbWorms), wormsSections(wormsSections), wormsSectionsLen(wormsSectionsLen), maxSlowness(maxSlowness)
+PatternWorms::PatternWorms(int nbWorms, int *worm, int wormLen, int maxSlowness) :
+  nbWorms(nbWorms), worm(worm), wormLen(wormLen), maxSlowness(maxSlowness)
 {
 }
 
@@ -17,14 +17,14 @@ void PatternWorms::_animate()
   int wormsSpeed[nbWorms];
   int wormsHue[nbWorms];
   int wormsSleep[nbWorms];
-//  int wormsSectionsLen = sizeof(wormsSections) / sizeof(wormsSections[0]);
-  int wormsBody[nbWorms * wormsSectionsLen];
+  int wormsBody[nbWorms * wormLen];
   
   for (int w = 0; w < nbWorms; w++)
   {
-    for (int i = 0; i < wormsSectionsLen; i++)
+    int firstLed = random(0, NBLEDS - wormLen);
+    for (int i = 0; i < wormLen; i++)
     {
-        wormsBody[w*wormsSectionsLen + i] = i;
+        wormsBody[w*wormLen + i] = i + firstLed;
     }
     wormsDirection[w] = 1;
     wormsSpeed[w] = random(0,maxSlowness);
@@ -51,7 +51,7 @@ void PatternWorms::_animate()
         wormsSleep[w] = 0;
       
         // if we're at top or bottom, do some funny stuff
-        int headPosition = wormsBody[w*wormsSectionsLen + wormsSectionsLen-1];
+        int headPosition = wormsBody[w*wormLen + wormLen-1];
         if (headPosition >= NBLEDS - 1 || headPosition <= 0)
         {
           wormsDirection[w] *= -1; // change direction
@@ -61,19 +61,19 @@ void PatternWorms::_animate()
         // TODO: collision
   
         // advance the tail
-        for (int i = 0; i < wormsSectionsLen - 1; i++)
+        for (int i = 0; i < wormLen - 1; i++)
         {
-          wormsBody[w*wormsSectionsLen + i] = wormsBody[w*wormsSectionsLen + i+1];
+          wormsBody[w*wormLen + i] = wormsBody[w*wormLen + i+1];
         }
         // and set the head
-        wormsBody[w*wormsSectionsLen + wormsSectionsLen-1] += wormsDirection[w];
+        wormsBody[w*wormLen + wormLen-1] += wormsDirection[w];
       }
       
       // set the colors now, from tail to head
       // because the head must always have the last word
-      for (int i = 0; i < wormsSectionsLen; i++)
+      for (int i = 0; i < wormLen; i++)
       {
-        leds.setPixel(LEDS_OFFSET + wormsBody[w*wormsSectionsLen + i], makeColor(wormsHue[w], 100, wormsSections[i]));
+        leds.setPixel(LEDS_OFFSET + wormsBody[w*wormLen + i], makeColor(wormsHue[w], 100, worm[i]));
       }
     }
     

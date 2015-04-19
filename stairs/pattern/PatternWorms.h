@@ -12,8 +12,8 @@ public:
 
 protected:
     int nbWorms;
-    int *wormsSections;
-    int wormsSectionsLen;
+    int *worm;
+    int wormLen;
     int maxSlowness;
 
     virtual void _animate();

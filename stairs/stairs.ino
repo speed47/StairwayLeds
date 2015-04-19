@@ -19,7 +19,7 @@ OctoWS2811 leds(NBLEDS, displayMemory, drawingMemory, WS2811_GRB | WS2811_800kHz
 
 // patterns
 int chase[] = {1, 2, 4, 6, 15, 25, 35, 50};
-int wormsSections[] = { 1, 5, 10, 15, 9, 5, 4, 6, 7, 30 };
+int worm[] = {1, 5, 10, 15, 30, 50};
 
 Pattern *patterns[] = {
   //new PatternPlain(0xFFFFFF, 5000),
@@ -33,8 +33,12 @@ Pattern *patterns[] = {
     /*delay*/ 4,
     /*hueStep*/ 3
   ),
-  new PatternWorms(NBLEDS / 20, wormsSections, sizeof(wormsSections) / sizeof(wormsSections[0]), 30),
-  new PatternFireworks(),
+  new PatternWorms(NBLEDS / 20, worm, sizeof(worm) / sizeof(worm[0]), 30),
+  new PatternFireworks(
+    /*probability*/ 10,
+    /*delay*/ 15,
+    /*duration*/ 4000
+  ),
   new PatternAirport(
     /*anchorSpacing*/ 15,
     /*anchorPassiveColor*/ 0x111111,
@@ -43,7 +47,7 @@ Pattern *patterns[] = {
     /*anchorPassiveDuration*/ 600,
     /*anchorNearColor*/ 0x003000,
     /*wayColor*/        makeColor(HUE_RED,   100, 1),   
-    /*delayBetweenPhases*/      2000 //TODO
+    /*delayBetweenPhases*/      2000
   )
 };
 

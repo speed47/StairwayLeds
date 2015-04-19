@@ -7,7 +7,7 @@
 class PatternFireworks : public Pattern
 {
 public:
-    PatternFireworks(int probability = 10, unsigned int delay = 100, unsigned long duration = 4000);
+    PatternFireworks(int probability = 10, unsigned int delay = 15, unsigned long duration = 4000);
 
 protected:
     int _probability;
