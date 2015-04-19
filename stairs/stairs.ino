@@ -23,9 +23,27 @@ int worm[] = {1, 5, 10, 15, 30, 50};
 
 Pattern *patterns[] = {
   //new PatternPlain(0xFFFFFF, 5000),
-  new PatternEscalator(),
-  new PatternEscalatorRainbow(20,   1*1000,     1000, 2, 1.0),
-  new PatternEscalatorRainbow(30,  30*1000,        1, 7, 2.0),
+  new PatternEscalator(
+    /*mainLuminosity*/ 30,
+    /*glowLuminosity*/ 50,
+    /*glowSpeed*/ 1.5,
+    /*glowOften*/ 1,
+    /*mainHue*/ new Randomizer(0, 360)
+  ),
+  new PatternEscalatorRainbow(
+    /*mainLuminosity*/ 30,
+    /*delayFirst*/ 100,
+    /*delayLast*/ 1,
+    /*hueMultiplier*/ 7,
+    /*delayBetweenPhases*/ 2000
+  ),
+  new PatternEscalatorRainbow(
+    /*mainLuminosity*/ 20,
+    /*delayFirst*/ 1,
+    /*delayLast*/ 1,
+    /*hueMultiplier*/ 2,
+    /*delayBetweenPhases*/ 1000
+  ),
   new PatternK2000(
     /*chase*/ chase,
     /*chaseLen*/ sizeof(chase) / sizeof(chase[0]),
@@ -33,7 +51,12 @@ Pattern *patterns[] = {
     /*delay*/ 4,
     /*hueStep*/ 3
   ),
-  new PatternWorms(NBLEDS / 20, worm, sizeof(worm) / sizeof(worm[0]), 30),
+  new PatternWorms(
+    /*nbWorms*/ 15,
+    /*worm*/ worm,
+    /*wormLen*/ sizeof(worm) / sizeof(worm[0]),
+    /*maxSlowness*/ 20
+  ),
   new PatternFireworks(
     /*probability*/ 10,
     /*delay*/ 15,

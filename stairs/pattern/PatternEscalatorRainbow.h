@@ -7,14 +7,14 @@
 class PatternEscalatorRainbow : public Pattern
 {
 public:
-    PatternEscalatorRainbow(int mainLuminosity=30, int delayFirst=100*1000, int delayLast=0, int hueMultiplier=7, float delayBetweenPhases=2.0);
+    PatternEscalatorRainbow(int mainLuminosity=30, int delayFirst=100, int delayLast=0, int hueMultiplier=7, unsigned int delayBetweenPhases=2000);
 
 protected:
     int _mainLuminosity;
     int _delayFirst;
     int _delayLast;
     int _hueMultiplier;
-    float _delayBetweenPhases;
+    unsigned int _delayBetweenPhases;
 
     virtual void _animate();
 };

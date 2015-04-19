@@ -5,7 +5,7 @@
 #include "makeColor.h"
 #include "printbuf.h"
 
-PatternEscalatorRainbow::PatternEscalatorRainbow(int mainLuminosity, int delayFirst, int delayLast, int hueMultiplier, float delayBetweenPhases) :
+PatternEscalatorRainbow::PatternEscalatorRainbow(int mainLuminosity, int delayFirst, int delayLast, int hueMultiplier, unsigned int delayBetweenPhases) :
   _mainLuminosity(mainLuminosity), _delayFirst(delayFirst), _delayLast(delayLast), _hueMultiplier(hueMultiplier), _delayBetweenPhases(delayBetweenPhases)
 {
 }
