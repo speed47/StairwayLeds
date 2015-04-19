@@ -21,11 +21,11 @@ TEENSYDUINO = 122
 # configurable options
 OPTIONS = -DUSB_SERIAL -DLAYOUT_US_ENGLISH
 
-# more speed at the cost of size
-OPTIONS += -O2
+# more speed at the cost of size (has sometimes adverse effects!!)
+#OPTIONS += -O2
 
 # less size at the cost of speed
-#OPTIONS += -Os
+OPTIONS += -Os
 
 # ------- stuff below shouldn't need to be modified -----------
 
@@ -74,7 +74,7 @@ COMPILERPATH = $(TOOLSPATH)/arm/bin
 #************************************************************************
 
 GITREVISION = $(shell git log -n 1 --pretty=format:%h 2>/dev/null || echo unknown)
-GITBRANCH   = $(shell git branch | grep '*' | cut -d' ' -f2 || echo nobranch)
+GITBRANCH   = $(shell git branch | grep '*' | cut -d' ' -f2- | sed -re 's/[() ]/_/g' || echo nobranch)
 GITDIRTYTMP = $(shell git diff 2>/dev/null | md5sum | cut -c1-8)
 BUILDTIME = $(shell date | sed -re 's/ /_/g')
 ifeq ($(GITDIRTYTMP), d41d8cd9)
