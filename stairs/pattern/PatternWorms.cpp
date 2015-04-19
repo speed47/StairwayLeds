@@ -79,7 +79,7 @@ void PatternWorms::_animate()
     
     leds.show();
     digitalWrite(TEENSY_LED_PIN, LOW);
-//    delayMicroseconds(1000*3);
+//    delay(3);
   }
 }
 

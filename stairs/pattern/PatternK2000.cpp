@@ -60,7 +60,7 @@ void PatternK2000::_animate()
     // now display
     leds.show();
     digitalWrite(TEENSY_LED_PIN, LOW);
-    delayMicroseconds(1000 * _delay);
+    delay(_delay);
   }
 }
   

@@ -94,7 +94,7 @@ void loop()
     // just to get better pseudo random numbers when we need those:
     rand();
     // and sleep before polling for motion again
-    delayMicroseconds(1000 * 100);
+    delay(100);
   }
 }
 

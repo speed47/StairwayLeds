@@ -31,7 +31,7 @@ void PatternFireworks::_animate()
     }
     leds.show();
     digitalWrite(TEENSY_LED_PIN, LOW);
-    delayMicroseconds(1000 * this->_delay);
+    delay(this->_delay);
   }
 }
 
