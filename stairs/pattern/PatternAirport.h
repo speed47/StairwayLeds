@@ -7,13 +7,16 @@
 class PatternAirport : public Pattern
 {
 public:
-    PatternAirport(int anchorSpacing = 20, int anchorColorPassive = 0x1F1F1F, int anchorColorActive = 0xFFFFFF,
+    PatternAirport(int anchorSpacing = 20, int anchorPassiveColor = 0x1F1F1F, int anchorActiveColor = 0xFFFFFF,
+      unsigned int anchorActiveDuration = 100, unsigned int anchorPassiveDuration = 500,
       int anchorNearColor = 0x20CC20, int wayColor = 0x400000, unsigned long interDelay = 2000);
 
 protected:
     int _anchorSpacing;
-    int _anchorColorPassive;
-    int _anchorColorActive;
+    int _anchorPassiveColor;
+    int _anchorActiveColor;
+    unsigned int _anchorActiveDuration;
+    unsigned int _anchorPassiveDuration;
     int _anchorNearColor;
     int _wayColor;
     unsigned long _interDelay; // ms

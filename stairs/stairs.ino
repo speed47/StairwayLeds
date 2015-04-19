@@ -7,6 +7,7 @@
 #include "pattern/PatternK2000.h"
 #include "pattern/PatternWorms.h"
 #include "pattern/PatternFireworks.h"
+#include "pattern/PatternAirport.h"
 
 #include <OctoWS2811.h>
 
@@ -25,7 +26,8 @@ Pattern *patterns[] = {
   new PatternEscalatorRainbow(30,  30*1000,        1, 7, 2.0),
   new PatternK2000(HUE_RED, aLight, sizeof(aLight) / sizeof(aLight[0])),
   new PatternWorms(NBLEDS / 20, wormsSections, sizeof(wormsSections) / sizeof(wormsSections[0]), 30),
-  new PatternFireworks()
+  new PatternFireworks(),
+  new PatternAirport()
 };
 
 void setup()
