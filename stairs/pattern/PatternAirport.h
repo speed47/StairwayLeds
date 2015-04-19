@@ -9,7 +9,7 @@ class PatternAirport : public Pattern
 public:
     PatternAirport(int anchorSpacing = 20, int anchorPassiveColor = 0x1F1F1F, int anchorActiveColor = 0xFFFFFF,
       unsigned int anchorActiveDuration = 100, unsigned int anchorPassiveDuration = 500,
-      int anchorNearColor = 0x20CC20, int wayColor = 0x400000, unsigned long interDelay = 2000);
+      int anchorNearColor = 0x20CC20, int wayColor = 0x400000, unsigned long delayBetweenPhases = 2000);
 
 protected:
     int _anchorSpacing;
@@ -19,7 +19,7 @@ protected:
     unsigned int _anchorPassiveDuration;
     int _anchorNearColor;
     int _wayColor;
-    unsigned long _interDelay; // ms
+    unsigned long _delayBetweenPhases; // ms
 
     virtual void _animate();
 };

@@ -43,7 +43,7 @@ Pattern *patterns[] = {
     /*anchorPassiveDuration*/ 600,
     /*anchorNearColor*/ 0x003000,
     /*wayColor*/        makeColor(HUE_RED,   100, 1),   
-    /*interDelay*/      2000 //TODO
+    /*delayBetweenPhases*/      2000 //TODO
   )
 };
 

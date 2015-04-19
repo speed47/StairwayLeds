@@ -7,11 +7,11 @@
 
 PatternAirport::PatternAirport(int anchorSpacing, int anchorPassiveColor, int anchorActiveColor,
   unsigned int anchorActiveDuration, unsigned int anchorPassiveDuration,
-  int anchorNearColor, int wayColor, unsigned long interDelay) :
+  int anchorNearColor, int wayColor, unsigned long delayBetweenPhases) :
     _anchorSpacing(anchorSpacing), _anchorPassiveColor(anchorPassiveColor),
     _anchorActiveColor(anchorActiveColor), _anchorActiveDuration(anchorActiveDuration),
     _anchorPassiveDuration(anchorPassiveDuration), _anchorNearColor(anchorNearColor),
-    _wayColor(wayColor), _interDelay(interDelay)
+    _wayColor(wayColor), _delayBetweenPhases(delayBetweenPhases)
 {
 }
 
@@ -78,7 +78,7 @@ void PatternAirport::_animate()
       {
         phase = 2;
         humanPositionOffset = (NBLEDS / (float)_ledsPerMeter);
-        delay(_interDelay);
+        delay(_delayBetweenPhases);
       }
 
       else if (phase == 2 && humanPositionLed > NBLEDS)
