@@ -5,7 +5,7 @@
 #include "pattern/PatternEscalator.h"
 #include "pattern/PatternEscalatorRainbow.h"
 #include "pattern/PatternK2000.h"
-#include "pattern_worms.h"
+#include "pattern/PatternWorms.h"
 #include "pattern_fireworks.h"
 
 #include <OctoWS2811.h>
@@ -16,12 +16,15 @@ int drawingMemory[NBLEDS*6];
 OctoWS2811 leds(NBLEDS, displayMemory, drawingMemory, WS2811_GRB | WS2811_800kHz);
 
 // patterns
-int aLight[] = { 2, 5, 9 };
+int aLight[] = {1, 2, 4, 6, 15, 25, 35, 50};
+int wormsSections[] = { 1, 5, 10, 15, 9, 5, 4, 6, 7, 30 };
+
 Pattern *patterns[] = {
   new PatternEscalator(),
   new PatternEscalatorRainbow(20,   1*1000,     1000, 2, 1.0),
   new PatternEscalatorRainbow(30,  30*1000,        1, 7, 2.0),
-  new PatternK2000(200, aLight, sizeof(aLight))
+  new PatternK2000(HUE_RED, aLight, sizeof(aLight) / sizeof(aLight[0])),
+  new PatternWorms(NBLEDS / 20, wormsSections, sizeof(wormsSections) / sizeof(wormsSections[0]), 30)
 };
 
 void setup()
@@ -52,7 +55,7 @@ void loop()
     motionTop    = 0;//analogRead(   TOP_MOTION_DETECTOR_PIN);
 
     dbg2("motion sensor: %d", motionBottom);
-    if (motionBottom < DETECTION_THRESHOLD && motionTop < DETECTION_THRESHOLD)
+    if (motionBottom < MOTION_DETECTION_THRESHOLD && motionTop < MOTION_DETECTION_THRESHOLD)
     {
       // no motion detected, shut everything off
       for (int i = 0; i < NBLEDS; i++)
@@ -63,14 +66,9 @@ void loop()
     }
     else
     {
-      // number of worms we want, yay !
-      int nbWorms = NBLEDS / 20;
-      // lightness of each body part, here we have 3-led long worms
-      int wormsSections[] = { 1, 5, 10, 15, 9, 5, 4, 6, 7, 30 };
-      // the higher, the slower a worm can get. a number like 2 or 3 will burn your eyes
-      int maxSlowness = 30;
       // motion detected
-      int chosen = random(0, nbpatterns + 2);
+      int chosen = random(0, nbpatterns + 1);
+
       dbg1("MOTION DETECTED, chosen pattern: %d", chosen);
       if (chosen < nbpatterns)
       {
@@ -79,10 +77,6 @@ void loop()
       else if (chosen == nbpatterns)
       {
           pattern_fireworks();
-      }
-      else if (chosen == nbpatterns+1)
-      {
-          pattern_worms(nbWorms, wormsSections, sizeof(wormsSections) / sizeof(wormsSections[0]), maxSlowness);
       }
     }
 
