@@ -106,6 +106,9 @@ void loop()
       dbg1(code_version());
       dbg1("TEST MODE, running pattern %d (%s)", c, patterns[c]->name());
       patterns[c]->run();
+      // shut all strips off
+      ledsClear();
+      leds.show();
       dbg1("TEST MODE, sleeping");
       delay(1000);
     }
