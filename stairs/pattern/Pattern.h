@@ -7,6 +7,7 @@ public:
     Pattern(int ledsPerMeter = 60, float humanWalkingSpeed = 0.72);
     ~Pattern();
 
+    static inline const char* name() { return __FILE__; }
     unsigned long elapsed(); // returns ms since animation started
     virtual void run(); // main func
 

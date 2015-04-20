@@ -26,7 +26,7 @@ void Pattern::run()
     // should not happen, but avoid zerodiv just in case
     elapsedNoZero++;
   }
-  dbg1("last animation ran at %.1ffps (%lu iter in %lums)", this->_iterations / elapsedNoZero / 1000.0, this->_iterations, elapsedNoZero);
+  dbg1("%s animation ran at %.1ffps (%lu iter in %lums)", this->name(), this->_iterations / (elapsedNoZero / 1000.0), this->_iterations, elapsedNoZero);
 }
 
 void Pattern::_randomize()

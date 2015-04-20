@@ -11,7 +11,7 @@
 
 // should be defined via ./configure, but if not, here is a default
 #ifndef STAIRS_DEBUG
-# define STAIRS_DEBUG DEBUG_LEVEL_3
+# define STAIRS_DEBUG DEBUG_LEVEL_2
 #endif
 
 #if STAIRS_DEBUG >= DEBUG_LEVEL_1

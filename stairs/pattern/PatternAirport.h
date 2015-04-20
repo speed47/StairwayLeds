@@ -11,6 +11,8 @@ public:
       unsigned int anchorActiveDuration = 100, unsigned int anchorPassiveDuration = 500,
       int anchorNearColor = 0x20CC20, int wayColor = 0x400000, unsigned long delayBetweenPhases = 2000);
 
+    static inline const char* name() { return __FILE__; }
+
 protected:
     int _anchorSpacing;
     int _anchorPassiveColor;

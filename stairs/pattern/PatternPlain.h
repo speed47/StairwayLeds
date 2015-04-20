@@ -9,6 +9,8 @@ class PatternPlain : public Pattern
 public:
     PatternPlain(int color = 0xFFFFFF, unsigned int duration = 5000);
 
+    static inline const char* name() { return __FILE__; }
+
 protected:
     int _color;
     unsigned int _duration;

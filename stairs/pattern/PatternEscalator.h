@@ -10,6 +10,8 @@ public:
     PatternEscalator(int mainLuminosity=30, int glowLuminosity=50, float glowSpeed=1.5, int glowOften=1, Randomizer *mainHue = new Randomizer(0,360));
     ~PatternEscalator();
 
+    static inline const char* name() { return __FILE__; }
+
 protected:
     int mainLuminosity;
     int glowLuminosity;

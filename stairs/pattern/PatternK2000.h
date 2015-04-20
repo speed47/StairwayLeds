@@ -10,6 +10,8 @@ class PatternK2000 : public Pattern
 public:
     PatternK2000(int *chase = NULL, int chaseLen = 0, unsigned int duration = 5000, unsigned int delay = 4, int hueStep = 3);
 
+    static inline const char* name() { return __FILE__; }
+
 protected:
     int *_chase;
     int _chaseLen;

@@ -9,6 +9,8 @@ class PatternFireworks : public Pattern
 public:
     PatternFireworks(int probability = 10, unsigned int delay = 15, unsigned long duration = 4000);
 
+    static inline const char* name() { return __FILE__; }
+
 protected:
     int _probability;
     unsigned int _delay; // ms
