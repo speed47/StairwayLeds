@@ -29,7 +29,7 @@ void PatternEscalator::_animate()
     
     int phase = 1;
     float humanPositionOffset = 0;
-    while (1)
+    while (++this->_iterations)
     {
       float humanPosition = (this->elapsed() / 1000.0 * _humanWalkingSpeed) - humanPositionOffset;
       float humanPositionLed = humanPosition * _ledsPerMeter;

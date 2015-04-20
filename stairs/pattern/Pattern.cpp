@@ -1,6 +1,7 @@
 #include <limits.h>
 #include "Pattern.h" // myself
 #include "Arduino.h" // millis()
+#include "printbuf.h" // dbg*
 
 Pattern::Pattern(int ledsPerMeter, float humanWalkingSpeed) :
   _ledsPerMeter(ledsPerMeter), _humanWalkingSpeed(humanWalkingSpeed), _animationStart(0)
@@ -16,8 +17,16 @@ void Pattern::run()
 {
   // simple case (can be overriden)
   this->_randomize();
+  this->_iterations = 0;
   this->_animationStart = millis();
   this->_animate();
+  float elapsedNoZero = this->elapsed();
+  if (elapsedNoZero == 0)
+  {
+    // should not happen, but avoid zerodiv just in case
+    elapsedNoZero++;
+  }
+  dbg1("last animation ran at %.1ffps (%lu iter in %lums)", this->_iterations / elapsedNoZero / 1000.0, this->_iterations, elapsedNoZero);
 }
 
 void Pattern::_randomize()

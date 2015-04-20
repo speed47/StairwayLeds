@@ -22,7 +22,7 @@ void PatternAirport::_animate()
     bool anchorActive = true;
     unsigned long anchorLastSwitchTime = 0;
     unsigned long lastPhaseChange = 0;
-    while (1)
+    while (++this->_iterations)
     {
       float humanPosition = (this->elapsed() / 1000.0 * _humanWalkingSpeed) - humanPositionOffset;
       float humanPositionLed = humanPosition * _ledsPerMeter;

@@ -17,6 +17,7 @@ protected:
     int _ledsPerMeter;
     float _humanWalkingSpeed;
     unsigned long _animationStart;
+    unsigned long _iterations;
 };
 
 #endif

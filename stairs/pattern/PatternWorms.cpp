@@ -35,6 +35,8 @@ void PatternWorms::_animate()
   // main loop  
   while (this->elapsed() < _duration)
   {
+    this->_iterations++;
+
     // clear the leds
     ledsClear();
 
