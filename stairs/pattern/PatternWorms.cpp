@@ -5,44 +5,41 @@
 #include "makeColor.h"
 #include "printbuf.h"
 
-PatternWorms::PatternWorms(int nbWorms, int *worm, int wormLen, int maxSlowness) :
-  nbWorms(nbWorms), worm(worm), wormLen(wormLen), maxSlowness(maxSlowness)
+PatternWorms::PatternWorms(int nbWorms, int *worm, int wormLen, int lowerSpeed, unsigned int duration) :
+  _nbWorms(nbWorms), _worm(worm), _wormLen(wormLen), _lowerSpeed(lowerSpeed), _duration(duration)
 {
 }
 
 void PatternWorms::_animate()
 {
   // init stuff
-  int wormsDirection[nbWorms];
-  int wormsSpeed[nbWorms];
-  int wormsHue[nbWorms];
-  int wormsSleep[nbWorms];
-  int wormsBody[nbWorms * wormLen];
+  int wormsDirection[_nbWorms];
+  int wormsSpeed[_nbWorms];
+  int wormsHue[_nbWorms];
+  int wormsSleep[_nbWorms];
+  int wormsBody[_nbWorms * _wormLen];
   
-  for (int w = 0; w < nbWorms; w++)
+  for (int w = 0; w < _nbWorms; w++)
   {
-    int firstLed = random(0, NBLEDS - wormLen);
-    for (int i = 0; i < wormLen; i++)
+    int firstLed = random(0, NBLEDS - _wormLen);
+    for (int i = 0; i < _wormLen; i++)
     {
-        wormsBody[w*wormLen + i] = i + firstLed;
+        wormsBody[w*_wormLen + i] = i + firstLed;
     }
     wormsDirection[w] = 1;
-    wormsSpeed[w] = random(0,maxSlowness);
+    wormsSpeed[w] = random(0,_lowerSpeed);
     wormsHue[w]   = random(0,360);
     wormsSleep[w] = 0;
   }
 
   // main loop  
-  int steps = 2000;
-  while (steps-- > 0)
+  while (this->elapsed() < _duration)
   {
-    digitalWrite(TEENSY_LED_PIN, HIGH);
-
     // clear the leds
     ledsClear();
 
     // for each worm ...
-    for (int w = 0; w < nbWorms; w++)
+    for (int w = 0; w < _nbWorms; w++)
     {
       // does this worm need to move ?
       if (wormsSleep[w]++ > wormsSpeed[w])
@@ -51,35 +48,33 @@ void PatternWorms::_animate()
         wormsSleep[w] = 0;
       
         // if we're at top or bottom, do some funny stuff
-        int headPosition = wormsBody[w*wormLen + wormLen-1];
+        int headPosition = wormsBody[w*_wormLen + _wormLen-1];
         if (headPosition >= NBLEDS - 1 || headPosition <= 0)
         {
           wormsDirection[w] *= -1; // change direction
-          wormsSpeed[w] = random(0,maxSlowness); // change speed
-          wormsHue[w] = random(0,360); // change color
+          //wormsSpeed[w] = random(0,_lowerSpeed); // change speed
+          //wormsHue[w] = random(0,360); // change color
         }
         // TODO: collision
   
         // advance the tail
-        for (int i = 0; i < wormLen - 1; i++)
+        for (int i = 0; i < _wormLen - 1; i++)
         {
-          wormsBody[w*wormLen + i] = wormsBody[w*wormLen + i+1];
+          wormsBody[w*_wormLen + i] = wormsBody[w*_wormLen + i+1];
         }
         // and set the head
-        wormsBody[w*wormLen + wormLen-1] += wormsDirection[w];
+        wormsBody[w*_wormLen + _wormLen-1] += wormsDirection[w];
       }
       
       // set the colors now, from tail to head
       // because the head must always have the last word
-      for (int i = 0; i < wormLen; i++)
+      for (int i = 0; i < _wormLen; i++)
       {
-        leds.setPixel(LEDS_OFFSET + wormsBody[w*wormLen + i], makeColor(wormsHue[w], 100, worm[i]));
+        leds.setPixel(LEDS_OFFSET + wormsBody[w*_wormLen + i], makeColor(wormsHue[w], 100, _worm[i]));
       }
     }
     
     leds.show();
-    digitalWrite(TEENSY_LED_PIN, LOW);
-//    delay(3);
   }
 }
 

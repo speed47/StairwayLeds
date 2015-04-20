@@ -8,13 +8,14 @@
 class PatternWorms : public Pattern
 {
 public:
-    PatternWorms(int nbWorms = NBLEDS / 20, int* wormsSections = NULL, int wormsSectionsLen = 0, int maxSlowness = 30);
+    PatternWorms(int nbWorms = NBLEDS / 20, int* worm = NULL, int wormLen = 0, int lowerSpeed = 30, unsigned int duration = 5000);
 
 protected:
-    int nbWorms;
-    int *worm;
-    int wormLen;
-    int maxSlowness;
+    int _nbWorms;
+    int *_worm;
+    int _wormLen;
+    int _lowerSpeed;
+    unsigned int _duration;
 
     virtual void _animate();
 };
