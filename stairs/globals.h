@@ -62,6 +62,10 @@ inline void ledsClear(void)
     leds.setPixel(LEDS_OFFSET + i, 0);
 }
 
+inline static const char* code_version()
+{
+  return "git." EXPAND2STR(GIT_REVISION) "." EXPAND2STR(GIT_BRANCH) "." EXPAND2STR(GIT_DIRTY) " (" EXPAND2STR(BUILD_TIME) ")";
+}
 
 #endif
 

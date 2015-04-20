@@ -90,6 +90,7 @@ void setup()
   // patterns
   dbg1("got %d different patterns", sizeof(patterns) / sizeof(patterns[0]));
   // done
+  dbg1(code_version());
   dbg1("setup done");
 }
 
@@ -103,6 +104,7 @@ void loop()
   {
     for (int c = 0; c < nbpatterns; c++)
     {
+      dbg1(code_version());
       dbg1("TEST MODE, running pattern %d", c);
       patterns[c]->run();
       dbg1("TEST MODE, sleeping");
@@ -110,6 +112,7 @@ void loop()
     }
   }
 #else
+  int versionCounter = 0;
   while (1)
   {
     // power-on teensy led
@@ -117,6 +120,11 @@ void loop()
     // read detectors
     motionBottom = analogRead(BOTTOM_MOTION_DETECTOR_PIN);
     motionTop    = 0;//analogRead(   TOP_MOTION_DETECTOR_PIN);
+    // output version from time to time
+    if (versionCounter++ % 20 == 0)
+    {
+      dbg1("Running code version %s", code_version());
+    }
 
     dbg2("motion sensor: %d", motionBottom);
     if (motionBottom > MOTION_DETECTION_THRESHOLD || motionTop > MOTION_DETECTION_THRESHOLD)
