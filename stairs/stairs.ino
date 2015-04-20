@@ -12,7 +12,7 @@
 
 #include <OctoWS2811.h>
 
-//#define TEST_MODE
+#define TEST_MODE
 
 // globals of octows2811
 DMAMEM int displayMemory[NBLEDS*6];
@@ -96,7 +96,6 @@ void setup()
 
 void loop()
 {
-  int motionBottom, motionTop;
   int nbpatterns = sizeof(patterns) / sizeof(patterns[0]);
 
 #ifdef TEST_MODE
@@ -111,7 +110,10 @@ void loop()
       delay(1000);
     }
   }
+
 #else
+
+  int motionBottom, motionTop;
   int versionCounter = 0;
   while (1)
   {
