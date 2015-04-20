@@ -99,6 +99,7 @@ void loop()
   int nbpatterns = sizeof(patterns) / sizeof(patterns[0]);
 
 #ifdef TEST_MODE
+  delay(4000); // leave time for screen to be attached
   while (1)
   {
     for (int c = 0; c < nbpatterns; c++)

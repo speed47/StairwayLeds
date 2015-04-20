@@ -17,7 +17,7 @@ void PatternEscalatorRainbow::_animate()
     int shift = random(0,180);
     int delayNow = _delayFirst;
     int delayStepPerLed = (_delayFirst - _delayLast) / (float)(NBLEDS * 2);
-    while (this->_iterations++)
+    while (++this->_iterations)
     {
       float humanPosition = (this->elapsed() / 1000.0 * _humanWalkingSpeed) - humanPositionOffset;;
       float humanPositionLed = humanPosition * _ledsPerMeter;
