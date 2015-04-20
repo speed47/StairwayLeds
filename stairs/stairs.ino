@@ -34,7 +34,7 @@ Pattern *patterns[] = {
   ),
   new PatternEscalatorRainbow(
     /*mainLuminosity*/ 30,
-    /*delayFirst*/ 100,
+    /*delayFirst*/ 30,
     /*delayLast*/ 1,
     /*hueMultiplier*/ 7,
     /*delayBetweenPhases*/ 2000
@@ -70,8 +70,8 @@ Pattern *patterns[] = {
     /*anchorActiveColor*/  0xFFFFFF,
     /*anchorActiveDuration*/  100,
     /*anchorPassiveDuration*/ 600,
-    /*anchorNearColor*/ 0x003000,
-    /*wayColor*/        makeColor(HUE_RED,   100, 1),   
+    /*anchorNearColor*/ 0x300000, //0x003000,
+    /*wayColor*/        0x000002, //makeColor(HUE_GREEN, 100, 1), //makeColor(HUE_RED,   100, 1),   
     /*delayBetweenPhases*/      2000
   )
 };
@@ -99,18 +99,19 @@ void loop()
   int nbpatterns = sizeof(patterns) / sizeof(patterns[0]);
 
 #ifdef TEST_MODE
-  delay(4000); // leave time for screen to be attached
+  dbg1("waiting for screen to be attached");
+  delay(3000); // leave time for screen to be attached
   while (1)
   {
+    dbg1(code_version());
     for (int c = 0; c < nbpatterns; c++)
     {
-      dbg1(code_version());
       dbg1("TEST MODE, running pattern %d (%s)", c, patterns[c]->name());
       patterns[c]->run();
       // shut all strips off
       ledsClear();
       leds.show();
-      dbg1("TEST MODE, sleeping");
+      dbg1("sleeping");
       delay(1000);
     }
   }

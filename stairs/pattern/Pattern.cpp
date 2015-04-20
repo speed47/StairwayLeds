@@ -20,7 +20,8 @@ void Pattern::run()
   this->_iterations = 0;
   this->_animationStart = millis();
   this->_animate();
-  float elapsedNoZero = this->elapsed();
+  //dbg2("bugged ? anistart=%lu iter=%lu", this->_animationStart, this->_iterations);
+  unsigned long elapsedNoZero = this->elapsed();
   if (elapsedNoZero == 0)
   {
     // should not happen, but avoid zerodiv just in case

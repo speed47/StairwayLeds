@@ -19,7 +19,7 @@ void PatternFireworks::_animate()
 {
   while (this->elapsed() < this->_duration)
   {
-    this->_iterations++;
+    ++this->_iterations;
     digitalWrite(TEENSY_LED_PIN, HIGH);
     for (int led = 0; led < NBLEDS; led++)
     {

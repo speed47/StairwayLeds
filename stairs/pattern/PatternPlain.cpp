@@ -15,7 +15,7 @@ void PatternPlain::_animate()
   {
     leds.setPixel(LEDS_OFFSET + i, _color);
   }
-  this->_iterations++;
+  ++this->_iterations;
   leds.show();
   digitalWrite(TEENSY_LED_PIN, LOW);
   delay(_duration);

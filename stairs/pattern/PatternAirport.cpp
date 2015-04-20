@@ -22,13 +22,14 @@ void PatternAirport::_animate()
     bool anchorActive = true;
     unsigned long anchorLastSwitchTime = 0;
     unsigned long lastPhaseChange = 0;
-    while (++this->_iterations)
+    while (1)
     {
+      ++this->_iterations;
       float humanPosition = (this->elapsed() / 1000.0 * _humanWalkingSpeed) - humanPositionOffset;
       float humanPositionLed = humanPosition * _ledsPerMeter;
       unsigned long anchorLastSwitchDiff = this->elapsed() - anchorLastSwitchTime;
 
-      dbg3("phase=%d humanPos=%d humanPosLed=%d anchorActive=%d, anchorLastSwitchDiff=%lu", phase, (int)humanPosition, (int)humanPositionLed, anchorActive, anchorLastSwitchDiff);
+      dbg3("phase=%d humanPos=%.1f humanPosLed=%d anchorActive=%d, anchorLastSwitchDiff=%lu", phase, humanPosition, (int)humanPositionLed, anchorActive, anchorLastSwitchDiff);
       // possibly switch anchor status
       if ( (anchorActive && anchorLastSwitchDiff > _anchorActiveDuration) ||
            (!anchorActive && anchorLastSwitchDiff > _anchorPassiveDuration))
@@ -88,10 +89,10 @@ void PatternAirport::_animate()
         if (this->elapsed() - lastPhaseChange > _delayBetweenPhases)
         {
           phase = 3;
-          humanPositionOffset = humanPosition;
+          humanPositionOffset += humanPosition;
         }
       }
-      else if (phase == 3 && humanPositionLed > NBLEDS)
+      else if (phase == 3 && humanPositionLed > NBLEDS && !anchorActive && anchorLastSwitchDiff > 300)
       {
         break;
       }

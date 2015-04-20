@@ -25,7 +25,7 @@ void PatternK2000::_animate()
   while (this->elapsed() < _duration)
   {
     digitalWrite(TEENSY_LED_PIN, HIGH);
-    this->_iterations++;
+    ++this->_iterations;
     hue = hue + _hueStep % 360;
     // reverse direction if we're at the top
     if (k[_chaseLen-1] >= NBLEDS - 1)
