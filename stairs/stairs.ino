@@ -104,7 +104,7 @@ void loop()
     for (int c = 0; c < nbpatterns; c++)
     {
       dbg1(code_version());
-      dbg1("TEST MODE, running pattern %d", c);
+      dbg1("TEST MODE, running pattern %d (%s)", c, patterns[c]->name());
       patterns[c]->run();
       dbg1("TEST MODE, sleeping");
       delay(1000);
