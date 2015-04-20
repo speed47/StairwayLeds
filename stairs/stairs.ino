@@ -12,6 +12,8 @@
 
 #include <OctoWS2811.h>
 
+//#define TEST_MODE
+
 // globals of octows2811
 DMAMEM int displayMemory[NBLEDS*6];
 int drawingMemory[NBLEDS*6];
@@ -95,6 +97,19 @@ void loop()
 {
   int motionBottom, motionTop;
   int nbpatterns = sizeof(patterns) / sizeof(patterns[0]);
+
+#ifdef TEST_MODE
+  while (1)
+  {
+    for (int c = 0; c < nbpatterns; c++)
+    {
+      dbg1("TEST MODE, running pattern %d", c);
+      patterns[c]->run();
+      dbg1("TEST MODE, sleeping");
+      delay(1000);
+    }
+  }
+#else
   while (1)
   {
     // power-on teensy led
@@ -123,6 +138,7 @@ void loop()
     // and sleep before polling for motion again
     delay(100);
   }
+#endif
 }
 
 
