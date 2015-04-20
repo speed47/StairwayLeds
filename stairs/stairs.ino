@@ -34,9 +34,9 @@ Pattern *patterns[] = {
   ),
   new PatternEscalatorRainbow(
     /*mainLuminosity*/ 30,
-    /*delayFirst*/ 30,
-    /*delayLast*/ 1,
-    /*hueMultiplier*/ 7,
+    /*delayFirst*/ 15,
+    /*delayLast*/ 15,
+    /*hueMultiplier*/ 13,
     /*delayBetweenPhases*/ 2000
   ),
   new PatternEscalatorRainbow(
@@ -44,12 +44,12 @@ Pattern *patterns[] = {
     /*delayFirst*/ 1,
     /*delayLast*/ 1,
     /*hueMultiplier*/ 2,
-    /*delayBetweenPhases*/ 1000
+    /*delayBetweenPhases*/ 2000
   ),
   new PatternK2000(
     /*chase*/ chase,
     /*chaseLen*/ sizeof(chase) / sizeof(chase[0]),
-    /*duration*/ 5000,
+    /*duration*/ 8000,
     /*delay*/ 4,
     /*hueStep*/ 3
   ),
@@ -62,7 +62,7 @@ Pattern *patterns[] = {
   new PatternFireworks(
     /*probability*/ 10,
     /*delay*/ 15,
-    /*duration*/ 4000
+    /*duration*/ 6000
   ),
   new PatternAirport(
     /*anchorSpacing*/ 15,

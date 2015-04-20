@@ -17,10 +17,11 @@ void PatternEscalatorRainbow::_animate()
     int shift = random(0,180);
     int delayNow = _delayFirst;
     int delayStepPerLed = (_delayFirst - _delayLast) / (float)(NBLEDS * 2);
+    unsigned long lastPhaseChange = 0;
     while (1)
     {
       ++this->_iterations;
-      float humanPosition = (this->elapsed() / 1000.0 * _humanWalkingSpeed) - humanPositionOffset;;
+      float humanPosition = (this->elapsed() / 1000.0 * _humanWalkingSpeed) - humanPositionOffset;
       float humanPositionLed = humanPosition * _ledsPerMeter;
       float humanPositionLedTotal = humanPositionLed + ((phase - 1) * NBLEDS);
       delayNow = _delayFirst - (int)(delayStepPerLed * humanPositionLedTotal);
@@ -33,7 +34,7 @@ void PatternEscalatorRainbow::_animate()
       
       for (int i = 0; i < NBLEDS; i++)
       {
-        int luminosity;
+        int luminosity = 0;
         int hue = (shift + i) % 180;
         if (phase == 1)
         {
@@ -45,7 +46,11 @@ void PatternEscalatorRainbow::_animate()
             dbg3("phase=%d humanPos=%.1f humanPosLedTot=%.1f humanPosLed=%.1f delay=%d led.%d=%d", phase, humanPosition, humanPositionLedTotal, humanPositionLed, delayNow, i, luminosity);
           }
         }
-        else
+        else if (phase == 2)
+        {
+          luminosity = _mainLuminosity;
+        }
+        else if (phase == 3)
         {
           if      (humanPositionLed >  i    ) { luminosity = 0; }
           else if (humanPositionLed <= i - 1) { luminosity = _mainLuminosity; }
@@ -63,11 +68,18 @@ void PatternEscalatorRainbow::_animate()
       if (phase == 1 && humanPositionLed > NBLEDS)
       {
         phase = 2;
-        humanPositionOffset = (NBLEDS / (float)_ledsPerMeter);
-        delay(_delayBetweenPhases);
+        humanPositionOffset = humanPosition;
+        lastPhaseChange = this->elapsed();
       }
-
-      else if (phase == 2 && humanPositionLed > NBLEDS)
+      else if (phase == 2)
+      {
+        if (this->elapsed() - lastPhaseChange > _delayBetweenPhases)
+        {
+          phase = 3;
+          humanPositionOffset += humanPosition;
+        }
+      }
+      else if (phase == 3 && humanPositionLed > NBLEDS)
       {
         break;
       }
