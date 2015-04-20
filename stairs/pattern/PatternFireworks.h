@@ -9,7 +9,7 @@ class PatternFireworks : public Pattern
 public:
     PatternFireworks(int probability = 10, unsigned int delay = 15, unsigned long duration = 4000);
 
-    static inline const char* name() { return __FILE__; }
+    virtual inline const char* name() { return "Fireworks"; }
 
 protected:
     int _probability;

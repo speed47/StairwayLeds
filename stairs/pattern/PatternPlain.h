@@ -9,7 +9,7 @@ class PatternPlain : public Pattern
 public:
     PatternPlain(int color = 0xFFFFFF, unsigned int duration = 5000);
 
-    static inline const char* name() { return __FILE__; }
+    virtual inline const char* name() { return "Plain"; }
 
 protected:
     int _color;

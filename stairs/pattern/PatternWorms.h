@@ -10,7 +10,7 @@ class PatternWorms : public Pattern
 public:
     PatternWorms(int nbWorms = NBLEDS / 20, int* worm = NULL, int wormLen = 0, int lowerSpeed = 30, unsigned int duration = 5000);
 
-    static inline const char* name() { return __FILE__; }
+    virtual inline const char* name() { return "Worms"; }
 
 protected:
     int _nbWorms;
