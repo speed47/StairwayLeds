@@ -24,13 +24,14 @@ OctoWS2811 leds(NBLEDS, displayMemory, drawingMemory, WS2811_GRB | WS2811_800kHz
 int chase[] = {1, 2, 4, 6, 15, 25, 35, 50};
 int worm[] = {1, 5, 10, 15, 30, 50};
 
-Pattern *zpatterns[] = {
-  new PatternEscalator(),
-  new PatternDissolve()
-};
-
 Pattern *patterns[] = {
   //new PatternPlain(0xFFFFFF, 5000),
+  new PatternDissolve(
+    20,
+    2000,
+    new Randomizer(0,360),
+    new Randomizer(1,50)
+  ),
   new PatternEscalator(
     /*mainLuminosity*/ 30,
     /*glowLuminosity*/ 50,
@@ -82,7 +83,10 @@ Pattern *patterns[] = {
   )
 };
 
-
+// kill useless func
+void yield()
+{
+}
 
 void setup()
 {

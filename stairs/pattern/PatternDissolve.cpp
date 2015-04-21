@@ -71,6 +71,7 @@ void PatternDissolve::_animate()
     // ok, let's power on ledCandidate
     this->_randomize();
     leds.setPixel(LEDS_OFFSET + ledCandidate, makeColor(this->_colorPicker->value, 100, this->_luminosityPicker->value));
+    leds.show();
     digitalWrite(TEENSY_LED_PIN, LOW);
     delay(this->_delay);
   }

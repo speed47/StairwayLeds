@@ -25,6 +25,10 @@ OPTIONS = -DUSB_SERIAL -DLAYOUT_US_ENGLISH
 # less size at the cost of speed
 OPTIONS += -Os
 
+# compile-time optim, needs modified ld script, and removing dupe strlen
+# also breaks usb serial for now
+OPTIONS += -flto
+
 ###############################################################
 ###############################################################
 # ------- stuff below shouldn't need to be modified -----------
@@ -90,10 +94,10 @@ CPPFLAGS += -DGIT_BRANCH="$(GITBRANCH)"
 CPPFLAGS += -DBUILD_TIME="$(BUILDTIME)"
 
 # compiler options for C++ only
-CXXFLAGS = -std=gnu++0x -felide-constructors -fno-exceptions -fno-rtti -flto
+CXXFLAGS = -std=gnu++0x -felide-constructors -fno-exceptions -fno-rtti
 
 # compiler options for C only
-CFLAGS = -std=gnu99 -flto
+CFLAGS = -std=gnu99
 
 
 FLASHSIZE30=131072
@@ -127,8 +131,7 @@ ifdef TEENSYDUINO
 endif
 
 # linker options
-LDFLAGS = -Os -Wl,--gc-sections -mcpu=cortex-m4 -mthumb --specs=nano.specs -T$(LDSCRIPT) -Wl,-Map,$(TARGET).map -flto
-#LDFLAGS = -Os -Wl,--gc-sections -mcpu=cortex-m4 -mthumb -T$(LDSCRIPT) -Wl,-Map,$(TARGET).map
+LDFLAGS = $(OPTIONS) -Os -Wl,--gc-sections -mcpu=cortex-m4 -mthumb --specs=nano.specs -T$(LDSCRIPT) -Wl,-Map,$(TARGET).map
 
 # additional libraries to link
 LIBS = -lm
