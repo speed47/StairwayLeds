@@ -17,7 +17,7 @@ TEENSY = 31
 TEENSY_CORE_SPEED = 96000000
 
 # configurable options
-OPTIONS = -DUSB_SERIAL -DLAYOUT_US_ENGLISH -DUSING_MAKEFILE
+OPTIONS = -DUSB_SERIAL -DLAYOUT_US_ENGLISH
 
 # more speed at the cost of size (has sometimes adverse effects!!)
 #OPTIONS += -O2
@@ -90,10 +90,10 @@ CPPFLAGS += -DGIT_BRANCH="$(GITBRANCH)"
 CPPFLAGS += -DBUILD_TIME="$(BUILDTIME)"
 
 # compiler options for C++ only
-CXXFLAGS = -std=gnu++0x -felide-constructors -fno-exceptions -fno-rtti
+CXXFLAGS = -std=gnu++0x -felide-constructors -fno-exceptions -fno-rtti -flto
 
 # compiler options for C only
-CFLAGS = -std=gnu99
+CFLAGS = -std=gnu99 -flto
 
 
 FLASHSIZE30=131072
@@ -127,7 +127,7 @@ ifdef TEENSYDUINO
 endif
 
 # linker options
-LDFLAGS = -Os -Wl,--gc-sections -mcpu=cortex-m4 -mthumb --specs=nano.specs -T$(LDSCRIPT) -Wl,-Map,$(TARGET).map
+LDFLAGS = -Os -Wl,--gc-sections -mcpu=cortex-m4 -mthumb --specs=nano.specs -T$(LDSCRIPT) -Wl,-Map,$(TARGET).map -flto
 #LDFLAGS = -Os -Wl,--gc-sections -mcpu=cortex-m4 -mthumb -T$(LDSCRIPT) -Wl,-Map,$(TARGET).map
 
 # additional libraries to link

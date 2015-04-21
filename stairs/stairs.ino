@@ -13,7 +13,7 @@
 
 #include <OctoWS2811.h>
 
-//#define TEST_MODE
+#define TEST_MODE
 
 // globals of octows2811
 DMAMEM int displayMemory[NBLEDS*6];
@@ -24,7 +24,8 @@ OctoWS2811 leds(NBLEDS, displayMemory, drawingMemory, WS2811_GRB | WS2811_800kHz
 int chase[] = {1, 2, 4, 6, 15, 25, 35, 50};
 int worm[] = {1, 5, 10, 15, 30, 50};
 
-Pattern *patternzzs[] = {
+Pattern *zpatterns[] = {
+  new PatternEscalator(),
   new PatternDissolve()
 };
 
