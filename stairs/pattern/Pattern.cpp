@@ -2,6 +2,7 @@
 #include "Pattern.h" // myself
 #include "Arduino.h" // millis()
 #include "printbuf.h" // dbg*
+#include "globals.h" // ledsClear
 
 Pattern::Pattern(int ledsPerMeter, float humanWalkingSpeed) :
   _ledsPerMeter(ledsPerMeter), _humanWalkingSpeed(humanWalkingSpeed), _animationStart(0)
@@ -17,10 +18,10 @@ void Pattern::run()
 {
   // simple case (can be overriden)
   this->_randomize();
+  ledsClear(); // just in case
   this->_iterations = 0;
   this->_animationStart = millis();
   this->_animate();
-  //dbg2("bugged ? anistart=%lu iter=%lu", this->_animationStart, this->_iterations);
   unsigned long elapsedNoZero = this->elapsed();
   if (elapsedNoZero == 0)
   {

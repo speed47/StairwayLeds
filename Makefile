@@ -19,11 +19,14 @@ TEENSY_CORE_SPEED = 96000000
 # configurable options
 OPTIONS = -DUSB_SERIAL -DLAYOUT_US_ENGLISH
 
-# more speed at the cost of size (has sometimes adverse effects!!)
-#OPTIONS += -O2
-
 # less size at the cost of speed
 OPTIONS += -Os
+# vs. more speed at the cost of size (has sometimes adverse effects!!)
+#OPTIONS += -O2
+
+# compile-time optim, needs modified ld script, and removing dupe strlen
+# also breaks usb serial for now. don't forget to distclean.
+#OPTIONS += -flto
 
 ###############################################################
 ###############################################################
@@ -127,8 +130,7 @@ ifdef TEENSYDUINO
 endif
 
 # linker options
-LDFLAGS = -Os -Wl,--gc-sections -mcpu=cortex-m4 -mthumb --specs=nano.specs -T$(LDSCRIPT) -Wl,-Map,$(TARGET).map
-#LDFLAGS = -Os -Wl,--gc-sections -mcpu=cortex-m4 -mthumb -T$(LDSCRIPT) -Wl,-Map,$(TARGET).map
+LDFLAGS = $(OPTIONS) -Os -Wl,--gc-sections -mcpu=cortex-m4 -mthumb --specs=nano.specs -T$(LDSCRIPT) -Wl,-Map,$(TARGET).map
 
 # additional libraries to link
 LIBS = -lm

@@ -9,6 +9,7 @@
 #include "pattern/PatternWorms.h"
 #include "pattern/PatternFireworks.h"
 #include "pattern/PatternAirport.h"
+#include "pattern/PatternDissolve.h"
 
 #include <OctoWS2811.h>
 
@@ -25,6 +26,12 @@ int worm[] = {1, 5, 10, 15, 30, 50};
 
 Pattern *patterns[] = {
   //new PatternPlain(0xFFFFFF, 5000),
+  new PatternDissolve(
+    20,
+    2000,
+    new Randomizer(0,360),
+    new Randomizer(1,50)
+  ),
   new PatternEscalator(
     /*mainLuminosity*/ 30,
     /*glowLuminosity*/ 50,
@@ -75,6 +82,11 @@ Pattern *patterns[] = {
     /*delayBetweenPhases*/      2000
   )
 };
+
+// kill useless func
+void yield()
+{
+}
 
 void setup()
 {
