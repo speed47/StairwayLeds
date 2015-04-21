@@ -17,7 +17,7 @@ TEENSY = 31
 TEENSY_CORE_SPEED = 96000000
 
 # configurable options
-OPTIONS = -DUSB_SERIAL -DLAYOUT_US_ENGLISH -DUSING_MAKEFILE
+OPTIONS = -DUSB_SERIAL -DLAYOUT_US_ENGLISH
 
 # more speed at the cost of size (has sometimes adverse effects!!)
 #OPTIONS += -O2
