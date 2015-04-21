@@ -9,6 +9,7 @@
 #include "pattern/PatternWorms.h"
 #include "pattern/PatternFireworks.h"
 #include "pattern/PatternAirport.h"
+#include "pattern/PatternDissolve.h"
 
 #include <OctoWS2811.h>
 
@@ -22,6 +23,10 @@ OctoWS2811 leds(NBLEDS, displayMemory, drawingMemory, WS2811_GRB | WS2811_800kHz
 // patterns
 int chase[] = {1, 2, 4, 6, 15, 25, 35, 50};
 int worm[] = {1, 5, 10, 15, 30, 50};
+
+Pattern *patternzzs[] = {
+  new PatternDissolve()
+};
 
 Pattern *patterns[] = {
   //new PatternPlain(0xFFFFFF, 5000),
@@ -75,6 +80,8 @@ Pattern *patterns[] = {
     /*delayBetweenPhases*/      2000
   )
 };
+
+
 
 void setup()
 {
