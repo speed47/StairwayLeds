@@ -13,7 +13,7 @@
 
 #include <OctoWS2811.h>
 
-#define TEST_MODE
+//#define TEST_MODE
 
 // globals of octows2811
 DMAMEM int displayMemory[NBLEDS*6];
