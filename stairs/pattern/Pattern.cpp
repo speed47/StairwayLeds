@@ -17,7 +17,6 @@ Pattern::~Pattern()
 void Pattern::run()
 {
   // simple case (can be overriden)
-  this->_randomize();
   ledsClear(); // just in case
   this->_iterations = 0;
   this->_animationStart = millis();
@@ -30,11 +29,6 @@ void Pattern::run()
   }
   dbg1("%s animation ran at %.1ffps (%lu iter in %lums)", this->name(),
     this->_iterations / (elapsedNoZero / 1000.0), this->_iterations, elapsedNoZero);
-}
-
-void Pattern::_randomize()
-{
-  // noop by default
 }
 
 unsigned long Pattern::elapsed()

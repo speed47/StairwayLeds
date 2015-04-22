@@ -12,13 +12,12 @@ public:
     virtual void run(); // main func
 
 protected:
-    virtual void _randomize();
-    virtual void _animate() = 0; // pure virtual, must be defined in child
-
     int _ledsPerMeter;
     float _humanWalkingSpeed;
     unsigned long _animationStart;
     unsigned long _iterations;
+
+    virtual void _animate() = 0; // pure virtual, must be defined in child
 };
 
 #endif

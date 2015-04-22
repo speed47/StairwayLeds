@@ -16,12 +16,6 @@ PatternDissolve::~PatternDissolve()
   delete this->_luminosityPicker;
 }
 
-void PatternDissolve::_randomize()
-{
-  this->_colorPicker->randomize();
-  this->_luminosityPicker->randomize();
-}
-
 void PatternDissolve::_animate()
 {
   int phase = 1;
@@ -92,7 +86,8 @@ void PatternDissolve::_animate()
     // ok, let's power on (or off) ledCandidate
     if (phase == 1)
     {
-      this->_randomize();
+      this->_colorPicker->randomize();
+      this->_luminosityPicker->randomize();
       leds.setPixel(LEDS_OFFSET + ledCandidate, makeColor(this->_colorPicker->value, 100, this->_luminosityPicker->value));
     }
     else

@@ -32,8 +32,8 @@ Pattern *patterns[] = {
   new PatternDissolve(
     /*delay*/ 20,
     /*delayBetweenPhases*/ 2000,
-    /*colorPicker*/ new Randomizer(0,360),
-    /*luminosityPicker*/ new Randomizer(1,50)
+    /*colorPicker*/ new Randomizer(0, 360),
+    /*luminosityPicker*/ new Randomizer(1, 51)
   ),
   new PatternEscalator(
     /*mainLuminosity*/ 30,
@@ -67,7 +67,7 @@ Pattern *patterns[] = {
     /*nbWorms*/ 15,
     /*worm*/ worm,
     /*wormLen*/ sizeof(worm) / sizeof(worm[0]),
-    /*maxSlowness*/ 20
+    /*maxSlowness*/ 10
   ),
   new PatternFireworks(
     /*probability*/ 10,
@@ -75,13 +75,13 @@ Pattern *patterns[] = {
     /*duration*/ 6000
   ),
   new PatternAirport(
-    /*anchorSpacing*/ 12,
+    /*anchorSpacing*/ 15,
     /*anchorPassiveColor*/ 0x111111,
     /*anchorActiveColor*/  0xFFFFFF,
     /*anchorActiveDuration*/  100,
     /*anchorPassiveDuration*/ 600,
     /*anchorNearColor*/ 0x300000, //0x003000,
-    /*wayColor*/        0x000005, //makeColor(HUE_GREEN, 100, 1), //makeColor(HUE_RED,   100, 1),   
+    /*wayColor*/        0x000004, //makeColor(HUE_GREEN, 100, 1), //makeColor(HUE_RED,   100, 1),   
     /*delayBetweenPhases*/      2000
   )
 };

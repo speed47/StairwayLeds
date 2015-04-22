@@ -15,11 +15,6 @@ PatternEscalator::~PatternEscalator()
   delete this->mainHue;
 }
 
-void PatternEscalator::_randomize()
-{
-  this->mainHue->randomize();
-}
-
 void PatternEscalator::_animate()
 {
     int glowHue;
@@ -29,6 +24,9 @@ void PatternEscalator::_animate()
     
     int phase = 1;
     float humanPositionOffset = 0;
+
+    this->mainHue->randomize();
+
     while (1)
     {
       ++this->_iterations;

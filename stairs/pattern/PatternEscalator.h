@@ -20,7 +20,6 @@ protected:
 
     Randomizer* mainHue;
 
-    virtual void _randomize();
     virtual void _animate();
 };
 
