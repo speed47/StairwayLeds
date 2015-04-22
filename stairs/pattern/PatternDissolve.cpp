@@ -24,6 +24,7 @@ void PatternDissolve::_randomize()
 
 void PatternDissolve::_animate()
 {
+  // phase 1:
   while (1)
   {
     digitalWrite(TEENSY_LED_PIN, HIGH);
@@ -31,8 +32,8 @@ void PatternDissolve::_animate()
     // choose a led to lit
     unsigned int ledCandidate = random(0,NBLEDS);
     bool found = false;
-    // is it lit already ?
     int direction = random(0,2) == 1 ? 1 : -1;
+    // is it lit already ?
     while (ledCandidate >= 0 && ledCandidate < NBLEDS)
     {
       if (leds.getPixel(LEDS_OFFSET + ledCandidate) == 0x000000)
@@ -63,9 +64,9 @@ void PatternDissolve::_animate()
     if (!found)
     {
       // at the other extremity now ?? ok, so actually everybody is lit. STOOOOOP
-      digitalWrite(TEENSY_LED_PIN, LOW);
-      delay(this->_delayBetweenPhases);
-      digitalWrite(TEENSY_LED_PIN, HIGH);
+      //digitalWrite(TEENSY_LED_PIN, LOW);
+      //delay(this->_delayBetweenPhases);
+      //digitalWrite(TEENSY_LED_PIN, HIGH);
       break;
     }
     // ok, let's power on ledCandidate
@@ -74,6 +75,12 @@ void PatternDissolve::_animate()
     leds.show();
     digitalWrite(TEENSY_LED_PIN, LOW);
     delay(this->_delay);
+  }
+  // phase2: every led is on, now let's glow !
+  unsigned long lastPhaseChange = this->duration();
+  while (1)
+  {
+    //TODO
   }
 }
 
