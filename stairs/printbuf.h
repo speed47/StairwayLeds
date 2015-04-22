@@ -5,14 +5,14 @@
 
 #define PRINT_BUFFER_SIZE 128
 
-#define DEBUG_NONE    0
-#define DEBUG_MIN     1
-#define DEBUG_NORMAL  2
-#define DEBUG_FULL    3
+#define DEBUG_NONE  0
+#define DEBUG_1     1
+#define DEBUG_2     2
+#define DEBUG_3     3
 
 // should be defined via ./configure, but if not, here is a default
 #ifndef PROJECT_DEBUG
-# define PROJECT_DEBUG DEBUG_NORMAL
+# define PROJECT_DEBUG DEBUG_2
 #endif
 
 char *printbuf(const char *format, ...)
@@ -28,7 +28,7 @@ void dbg(int level, const char *format, ...)
 inline void dbg1(const char *format, ...) __attribute__ ((format (printf, 1, 2)));
 inline void dbg1(const char *format, ...)
 {
-#if PROJECT_DEBUG >= DEBUG_MIN
+#if PROJECT_DEBUG >= DEBUG_1
 	va_list args;
 	va_start(args,format);
 	dbgva(1, format, args);
@@ -39,7 +39,7 @@ inline void dbg1(const char *format, ...)
 inline void dbg2(const char *format, ...) __attribute__ ((format (printf, 1, 2)));
 inline void dbg2(const char *format, ...)
 {
-#if PROJECT_DEBUG >= DEBUG_NORMAL
+#if PROJECT_DEBUG >= DEBUG_2
 	va_list args;
 	va_start(args,format);
 	dbgva(2, format, args);
@@ -50,7 +50,7 @@ inline void dbg2(const char *format, ...)
 inline void dbg3(const char *format, ...) __attribute__ ((format (printf, 1, 2)));
 inline void dbg3(const char *format, ...)
 {
-#if PROJECT_DEBUG >= DEBUG_FULL
+#if PROJECT_DEBUG >= DEBUG_3
 	va_list args;
 	va_start(args,format);
 	dbgva(3, format, args);
