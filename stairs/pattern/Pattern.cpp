@@ -19,6 +19,7 @@ void Pattern::run()
   // simple case (can be overriden)
   ledsClear(); // just in case
   this->_iterations = 0;
+  this->_overflowAdjust = 0;
   this->_animationStart = millis();
   this->_animate();
   unsigned long elapsedNoZero = this->elapsed();
@@ -33,13 +34,12 @@ void Pattern::run()
 
 unsigned long Pattern::elapsed()
 {
-  static unsigned long overflowAdjust = 0;
   if (millis() < this->_animationStart)
   {
     // handle millis() overflow
-    overflowAdjust = (ULONG_MAX - this->_animationStart);
+    this->_overflowAdjust = (ULONG_MAX - this->_animationStart);
     this->_animationStart = 0;
   }
-  return millis() - this->_animationStart + overflowAdjust;
+  return millis() - this->_animationStart + this->_overflowAdjust;
 }
 

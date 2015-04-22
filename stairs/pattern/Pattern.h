@@ -16,6 +16,7 @@ protected:
     float _humanWalkingSpeed;
     unsigned long _animationStart;
     unsigned long _iterations;
+    unsigned long _overflowAdjust;
 
     virtual void _animate() = 0; // pure virtual, must be defined in child
 };
