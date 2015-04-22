@@ -2,8 +2,8 @@
 
 // Convert HSL (Hue, Saturation, Lightness) to RGB (Red, Green, Blue)
 //
-//   hue:        0 to 359 - position on the color wheel, 0=red, 60=orange,
-//                            120=yellow, 180=green, 240=blue, 300=violet
+//   hue:        0 to 359 - position on the color wheel, 0=red, 30=orange,
+//                            60=yellow, 120=green, 180=cyan, 240=blue, 300=violet
 //
 //   saturation: 0 to 100 - how bright or dull the color, 100=full, 0=gray
 //

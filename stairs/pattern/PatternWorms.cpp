@@ -22,9 +22,10 @@ void PatternWorms::_animate()
   for (int w = 0; w < _nbWorms; w++)
   {
     int firstLed = random(0, NBLEDS - _wormLen);
+    int direction = (random(0, 2) == 0 ? -1 : 1);
     for (int i = 0; i < _wormLen; i++)
     {
-        wormsBody[w*_wormLen + i] = i + firstLed;
+        wormsBody[w*_wormLen + i] = firstLed + (i * direction);
     }
     wormsDirection[w] = 1;
     wormsSpeed[w] = random(0,_lowerSpeed);

@@ -14,7 +14,7 @@ void PatternEscalatorRainbow::_animate()
 {
     int phase = 1;
     float humanPositionOffset = 0;
-    int shift = random(0,180);
+    int shift = random(0, 360);
     int delayNow = _delayFirst;
     int delayStepPerLed = (_delayFirst - _delayLast) / (float)(NBLEDS * 2);
     unsigned long lastPhaseChange = 0;
@@ -35,7 +35,7 @@ void PatternEscalatorRainbow::_animate()
       for (int i = 0; i < NBLEDS; i++)
       {
         int luminosity = 0;
-        int hue = (shift + i) % 180;
+        int hue = (shift + i) % 360;
         if (phase == 1)
         {
           if      (humanPositionLed <  i    ) { luminosity = 0; }
@@ -60,7 +60,7 @@ void PatternEscalatorRainbow::_animate()
             dbg3("phase=%d humanPos=%.1f humanPosLedTot=%.1f humanPosLed=%.1f delay=%d led.%d=%d", phase, humanPosition, humanPositionLedTotal, humanPositionLed, delayNow, i, luminosity);
           }
         }
-        leds.setPixel(LEDS_OFFSET + i, makeColor( (hue * _hueMultiplier) % 180, 100, luminosity));
+        leds.setPixel(LEDS_OFFSET + i, makeColor( (hue * _hueMultiplier) % 360, 100, luminosity));
       }
       
       leds.show();
