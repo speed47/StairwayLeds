@@ -11,7 +11,10 @@
 #include "pattern/PatternAirport.h"
 #include "pattern/PatternDissolve.h"
 
+#ifndef _HEADER_OCTOWS2811_H
+#define _HEADER_OCTOWS2811_H
 #include <OctoWS2811.h>
+#endif
 
 //#define TEST_MODE
 

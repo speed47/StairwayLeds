@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #include <kinetis.h>
-#include <HardwareSerial.h>
+#include <usb_serial.h>
 #include <core_pins.h>
 
 // buffer used and returned by printbuf() and printbufva()

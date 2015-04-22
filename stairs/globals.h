@@ -1,9 +1,13 @@
 #ifndef _GLOBALS_H
 #define _GLOBALS_H
 
+#ifndef _HEADER_OCTOWS2811_H
+#define _HEADER_OCTOWS2811_H
+#include <OctoWS2811.h>
+#endif
+
 #include <stdint.h>
 #include <time.h>
-#include <OctoWS2811.h>
 #include "pattern/Pattern.h"
 
 /* the 4 defines below should be managed by the Makefile
