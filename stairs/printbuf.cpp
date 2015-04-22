@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #include <kinetis.h>
-#include <HardwareSerial.h>
+#include <usb_serial.h>
 #include <core_pins.h>
 
 // buffer used and returned by printbuf() and printbufva()
@@ -21,7 +21,7 @@ char *printbuf(const char *format, ...)
   return _print_buffer;
 }
 
-// same as printbuf() but with already initialized va_list (used by dbg() func below)
+// same as printbuf() but with already initialized va_list (used by dbgva() func below)
 char *printbufva(const char *format, va_list args)
 {
   vsnprintf(_print_buffer, PRINT_BUFFER_SIZE, format, args);
@@ -37,21 +37,18 @@ inline int usb_serial_print(const char *buffer)
 // also see dbg1/dbg2/dbg3 macros
 void dbg(int level, const char *format, ...)
 {
-  // if currently configured debug level is below this message debug level, skip it
-  /*
-  if (cfg.debug_level < level)
-  {
-    return;
-  }
-  */
   va_list args;
-
-  unsigned long now = millis();
-  usb_serial_print( printbuf("[%5lu.%03d] dbg%d: ", now/1000, (int)((now/1000.0 - now/1000) * 1000), level) );
   va_start(args, format);
-  usb_serial_print( printbufva(format, args) );
+  dbgva(level, format, args);
   va_end(args);
-  usb_serial_print( "\r\n" );
 }
 
+// same as dbg() but with already initialized va_list (used by dbg1/2/3 macros)
+void dbgva(int level, const char *format, va_list args)
+{
+  unsigned long now = millis();
+  usb_serial_print( printbuf("[%5lu.%03d] dbg%d: ", now/1000, (int)((now/1000.0 - now/1000) * 1000), level) );
+  usb_serial_print( printbufva(format, args) );
+  usb_serial_print( "\r\n" );
+}
 

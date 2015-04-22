@@ -28,9 +28,14 @@ OPTIONS += -Os
 # also breaks usb serial for now. don't forget to distclean.
 #OPTIONS += -flto
 
+# libs to compile
+TEENSYLIBS = OctoWS2811
+
+# optional: cppclean location
+CPPCLEAN = $(HOME)/cppclean/cppclean
+
+###### END OF CONFIGURATION ###################################
 ###############################################################
-###############################################################
-# ------- stuff below shouldn't need to be modified -----------
 
 #************************************************************************
 # Location of Teensyduino utilities, Toolchain, and Arduino Libraries.
@@ -57,18 +62,41 @@ endif
 COREPATH = $(shell find $(ARDUINOPATH) -type d -name teensy3)
 
 # path location for Arduino libraries
-LIBRARYPATH = $(COREPATH)/../../libraries/OctoWS2811
+LIBRARYBASEDIR = $(ARDUINOPATH)/hardware/teensy/avr/libraries
+ifeq ($(wildcard $(LIBRARYBASEDIR)),)
+    LIBRARYBASEDIR = $(ARDUINOPATH)/libraries
+endif
+LIBRARYPATH = $(foreach lib,$(TEENSYLIBS),$(LIBRARYBASEDIR)/$(lib))
 
 # path location for the arm-none-eabi compiler
-#COMPILERPATH = $(TOOLSPATH)/arm-none-eabi/bin
-COMPILERPATH = $(TOOLSPATH)/arm/bin
-#arm/bin
+COMPILERPATH = $(TOOLSPATH)/arm-none-eabi/bin
+ifeq ($(wildcard $(COMPILERPATH)),)
+    COMPILERPATH = $(TOOLSPATH)/arm/bin
+endif
 
 # Some libraries will require those two to be defined
 # arduino version
-ARDUINO = $(shell grep ^version= $(ARDUINOPATH)/hardware/arduino/avr/platform.txt | sed -re 's/[^0-9]//g')
+ARDUINOFULL = $(shell head -n1 $(ARDUINOPATH)/lib/version.txt)
+ARDUINO     = $(shell head -n1 $(ARDUINOPATH)/lib/version.txt | sed -re 's/[^0-9]//g')
+ifeq ($(ARDUINO),)
+    $(warning Could not autodetect ARDUINO version, using dummy value)
+    ARDUINOFULL = 1
+    ARDUINO     = 1
+endif
 # teensyduino version
-TEENSYDUINO = $(shell sed -re 's/[^0-9]//g' $(ARDUINOPATH)/lib/teensyduino.txt)
+TEENSYDUINOFULL = $(shell cat $(ARDUINOPATH)/lib/teensyduino.txt)
+TEENSYDUINO     = $(shell sed -re 's/[^0-9]//g' $(ARDUINOPATH)/lib/teensyduino.txt)
+ifeq ($(TEENSYDUINO),)
+    # hacky way to find the version number on old versions
+    TEENSYDUINOFULL = $(shell strings $(ARDUINOPATH)/hardware/tools/teensy | grep -Eo '^Teensy Loader [.0-9a-z-]+' | head -n1 | sed -re 's/Teensy Loader //')
+    TEENSYDUINO     = $(shell strings $(ARDUINOPATH)/hardware/tools/teensy | grep -Eo '^Teensy Loader [.0-9]+' | head -n1 | sed -re 's/Teensy Loader //;s/[^0-9]//g')
+    # fallback's fallback
+    ifeq ($(TEENSYDUINO),)
+        $(warning Could not autodetect TEENSYDUINO version, using dummy value)
+        TEENSYDUINOFULL = 1
+        TEENSYDUINO     = 1
+    endif
+endif
 
 #************************************************************************
 # Settings below this point usually do not need to be edited
@@ -167,6 +195,8 @@ SOURCES_CORE   := $(TC_FILES:.c=.o) $(TCPP_FILES:.cpp=.o) $(LC_FILES:.c=.o) $(LC
 OBJS_SKETCH := $(foreach $(SKETCHSRC),$(SOURCES_SKETCH), $(BUILDDIR)/$($(SKETCHSRC)))
 OBJS_CORE   := $(foreach $(SKETCHSRC),$(SOURCES_CORE), $(BUILDDIR)/$($(SKETCHSRC)))
 
+$(warning Working with arduino $(ARDUINOFULL) and teensyduino $(TEENSYDUINOFULL))
+
 all: hex
 
 build: $(TARGET).elf
@@ -183,6 +213,9 @@ upload: post_compile reboot
 
 screen:
 	@while ! test -r /dev/ttyACM0 ; do echo -n . ; sleep 1 ; done ; screen /dev/ttyACM0
+
+cppclean:
+	@$(CPPCLEAN) -I $(SKETCHSRC) -I $(COREPATH) $(L_INC) $(C_FILES) $(CPP_FILES) $(INO_FILES)
 
 $(BUILDDIR)/%.o: %.c
 	@/bin/echo -e "[CC]\t$<"

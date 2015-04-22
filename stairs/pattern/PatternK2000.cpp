@@ -13,7 +13,7 @@ PatternK2000::PatternK2000(int *chase, int _chaseLen, unsigned int duration, uns
 void PatternK2000::_animate()
 {
   int currentDirection = 1;
-  int hue = random(0, 361);
+  int hue = random(0, 360);
   int k[_chaseLen];
 
   // setup the head and tail  

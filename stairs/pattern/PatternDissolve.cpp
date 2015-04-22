@@ -24,6 +24,7 @@ void PatternDissolve::_randomize()
 
 void PatternDissolve::_animate()
 {
+  int phase = 1;
   while (1)
   {
     digitalWrite(TEENSY_LED_PIN, HIGH);
@@ -31,13 +32,19 @@ void PatternDissolve::_animate()
     // choose a led to lit
     unsigned int ledCandidate = random(0,NBLEDS);
     bool found = false;
-    // is it lit already ?
     int direction = random(0,2) == 1 ? 1 : -1;
+    // is it lit (or off) already ?
     while (ledCandidate >= 0 && ledCandidate < NBLEDS)
     {
-      if (leds.getPixel(LEDS_OFFSET + ledCandidate) == 0x000000)
+      if (phase == 1 && leds.getPixel(LEDS_OFFSET + ledCandidate) == 0x000000)
       {
-        // it's off, found !
+        // it's off, found ! will turn it on
+        found = true;
+        break;
+      }
+      else if (phase == 2 && leds.getPixel(LEDS_OFFSET + ledCandidate) != 0x000000)
+      {
+        // it's on, found ! will turn it off
         found = true;
         break;
       }
@@ -50,9 +57,15 @@ void PatternDissolve::_animate()
       ledCandidate -= direction;
       while (ledCandidate >= 0 && ledCandidate < NBLEDS)
       {
-        if (leds.getPixel(LEDS_OFFSET + ledCandidate) == 0x000000)
+        if (phase == 1 && leds.getPixel(LEDS_OFFSET + ledCandidate) == 0x000000)
         {
-          // it's off, found !
+          // it's off, found ! will turn it on
+          found = true;
+          break;
+        }
+        else if (phase == 2 && leds.getPixel(LEDS_OFFSET + ledCandidate) != 0x000000)
+        {
+          // it's on, found ! will turn it off
           found = true;
           break;
         }
@@ -62,15 +75,30 @@ void PatternDissolve::_animate()
     }
     if (!found)
     {
-      // at the other extremity now ?? ok, so actually everybody is lit. STOOOOOP
+      // at the other extremity now ?? ok, so actually everybody is lit (or off). STOOOOOP
       digitalWrite(TEENSY_LED_PIN, LOW);
-      delay(this->_delayBetweenPhases);
-      digitalWrite(TEENSY_LED_PIN, HIGH);
-      break;
+      if (phase == 1)
+      {
+        delay(this->_delayBetweenPhases);
+        phase = 2;
+        continue;
+      }
+      else if (phase == 2)
+      {
+        digitalWrite(TEENSY_LED_PIN, HIGH);
+        break;
+      }
     }
-    // ok, let's power on ledCandidate
-    this->_randomize();
-    leds.setPixel(LEDS_OFFSET + ledCandidate, makeColor(this->_colorPicker->value, 100, this->_luminosityPicker->value));
+    // ok, let's power on (or off) ledCandidate
+    if (phase == 1)
+    {
+      this->_randomize();
+      leds.setPixel(LEDS_OFFSET + ledCandidate, makeColor(this->_colorPicker->value, 100, this->_luminosityPicker->value));
+    }
+    else
+    {
+      leds.setPixel(LEDS_OFFSET + ledCandidate, 0x000000);
+    }
     leds.show();
     digitalWrite(TEENSY_LED_PIN, LOW);
     delay(this->_delay);

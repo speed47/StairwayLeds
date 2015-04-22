@@ -26,7 +26,7 @@ void PatternFireworks::_animate()
       int color = 0;
       if (random(0, this->_probability) >= this->_probability - 1)
       {
-        color = makeColor(random(0,361), 100, random(1,51));
+        color = makeColor(random(0,360), 100, random(1,51));
       }
       leds.setPixel(LEDS_OFFSET + led, color);
     }

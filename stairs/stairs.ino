@@ -11,7 +11,10 @@
 #include "pattern/PatternAirport.h"
 #include "pattern/PatternDissolve.h"
 
+#ifndef _HEADER_OCTOWS2811_H
+#define _HEADER_OCTOWS2811_H
 #include <OctoWS2811.h>
+#endif
 
 //#define TEST_MODE
 
@@ -25,12 +28,12 @@ int chase[] = {1, 2, 4, 6, 15, 25, 35, 50};
 int worm[] = {1, 5, 10, 15, 30, 50};
 
 Pattern *patterns[] = {
-  //new PatternPlain(0xFFFFFF, 5000),
+//  new PatternPlain(0xFFFFFF, 2000),
   new PatternDissolve(
-    20,
-    2000,
-    new Randomizer(0,360),
-    new Randomizer(1,50)
+    /*delay*/ 20,
+    /*delayBetweenPhases*/ 2000,
+    /*colorPicker*/ new Randomizer(0,360),
+    /*luminosityPicker*/ new Randomizer(1,50)
   ),
   new PatternEscalator(
     /*mainLuminosity*/ 30,
@@ -40,14 +43,14 @@ Pattern *patterns[] = {
     /*mainHue*/ new Randomizer(0, 360)
   ),
   new PatternEscalatorRainbow(
-    /*mainLuminosity*/ 30,
-    /*delayFirst*/ 15,
-    /*delayLast*/ 15,
-    /*hueMultiplier*/ 13,
+    /*mainLuminosity*/ 20,
+    /*delayFirst*/ 20,
+    /*delayLast*/ 20,
+    /*hueMultiplier*/ 27,
     /*delayBetweenPhases*/ 2000
   ),
   new PatternEscalatorRainbow(
-    /*mainLuminosity*/ 20,
+    /*mainLuminosity*/ 30,
     /*delayFirst*/ 1,
     /*delayLast*/ 1,
     /*hueMultiplier*/ 2,
@@ -72,13 +75,13 @@ Pattern *patterns[] = {
     /*duration*/ 6000
   ),
   new PatternAirport(
-    /*anchorSpacing*/ 15,
+    /*anchorSpacing*/ 12,
     /*anchorPassiveColor*/ 0x111111,
     /*anchorActiveColor*/  0xFFFFFF,
     /*anchorActiveDuration*/  100,
     /*anchorPassiveDuration*/ 600,
     /*anchorNearColor*/ 0x300000, //0x003000,
-    /*wayColor*/        0x000002, //makeColor(HUE_GREEN, 100, 1), //makeColor(HUE_RED,   100, 1),   
+    /*wayColor*/        0x000005, //makeColor(HUE_GREEN, 100, 1), //makeColor(HUE_RED,   100, 1),   
     /*delayBetweenPhases*/      2000
   )
 };
