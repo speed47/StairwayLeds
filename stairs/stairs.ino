@@ -31,7 +31,7 @@ int worm[] = {1, 5, 10, 15, 30, 50};
 Pattern *patterns[] = {
 //  new PatternPlain(0xFFFFFF, 2000),
   new PatternPlasma(
-    /*delayBetweenPhases*/ 2000,
+    /*delayBetweenPhases*/ 2000
   ),
   new PatternDissolve(
     /*delay*/ 20,
