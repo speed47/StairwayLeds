@@ -29,11 +29,10 @@ int chase[] = {1, 2, 4, 6, 15, 25, 35, 50};
 int worm[] = {1, 5, 10, 15, 30, 50};
 
 Pattern *patterns[] = {
-  new PatternPlasma()
-};
-
-Pattern *patternzs[] = {
 //  new PatternPlain(0xFFFFFF, 2000),
+  new PatternPlasma(
+    /*delayBetweenPhases*/ 2000,
+  ),
   new PatternDissolve(
     /*delay*/ 20,
     /*delayBetweenPhases*/ 2000,
