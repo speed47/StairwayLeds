@@ -7,12 +7,12 @@
 class PatternPlasma : public Pattern
 {
 public:
-    PatternPlasma(unsigned int duration = 5000);
+    PatternPlasma(unsigned int delayBetweenPhases = 2000);
 
     virtual inline const char* name() { return "Plasma"; }
 
 protected:
-    unsigned int _duration;
+    unsigned int _delayBetweenPhases;
 
     virtual void _animate();
 };

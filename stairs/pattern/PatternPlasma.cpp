@@ -5,7 +5,7 @@
 #include "makeColor.h"
 #include "printbuf.h"
 
-PatternPlasma::PatternPlasma(unsigned int duration) : _duration(duration)
+PatternPlasma::PatternPlasma(unsigned int delayBetweenPhases) : _delayBetweenPhases(delayBetweenPhases)
 {
 }
 
@@ -31,36 +31,95 @@ inline uint8_t fastUCosineCalc( unsigned int preWrapVal )
 
 void PatternPlasma::_animate()
 {
-  unsigned int time = random(0, UINT_MAX);
+  float time = random(0, 512);
 
-  int y = -120;
-  int yinc = 1;
+  const int ylim = 120;
 
-  dbg3("plasma running with y=%d", y);
-  while (this->elapsed() < this->_duration)
+  float y = -ylim;
+  float yinc = 0.3;
+  int mainLuminosity = 30;
+  unsigned int lastPhaseChange = 0;
+
+  int phase = 1;
+  float humanPositionOffset = 0;
+  while (1)
   {
-    for (int x = -(NBLEDS/2); x < (NBLEDS/2); x++)
+    ++this->_iterations;
+    dbg1("plasma running with y=%.1f", y);
+    float humanPosition = (this->elapsed() / 1000.0 * _humanWalkingSpeed) - humanPositionOffset;
+    float humanPositionLed = humanPosition * _ledsPerMeter;
+    for (int i = 0, x = -(NBLEDS/2); i < NBLEDS; i++, x++)
     {
-      int cx = x + fastCosineCalc(time*3)/32;
-      int cy = y + fastCosineCalc(time*2 + 128)/32;
+      int luminosity;
+      uint8_t r = 0;
+      uint8_t g = 0;
+      uint8_t b = 0;
+      if (phase == 1)
+      {
+        if      (humanPositionLed <  i    ) { luminosity = 0; }
+        else if (humanPositionLed >= i + 1) { luminosity = mainLuminosity; }
+        else
+        {
+          luminosity = mainLuminosity * (humanPositionLed - (int)humanPositionLed);
+          dbg3("phase=%d humanPositionLed=%.1f led.%d=%d", phase, humanPositionLed, i, luminosity);
+        }
+      }
+      else if (phase == 2)
+      {
+        luminosity = mainLuminosity;
+      }
+      else
+      {
+        if      (humanPositionLed >  i    ) { luminosity = 0; }
+        else if (humanPositionLed <= i - 1) { luminosity = mainLuminosity; }
+        else
+        {
+          luminosity = mainLuminosity * (1 - (humanPositionLed - (int)humanPositionLed));
+          dbg3("phase=%d humanPositionLed=%.1f led.%d=%d", phase, humanPositionLed, i, luminosity);
+        }
+      }
+      if (luminosity > 0)
+      {
+        int cx = x + fastCosineCalc(time*3)/32;
+        int cy = y + fastCosineCalc(time*2 + 128)/32;
 
-      int v1 = fastCosineCalc((cx*cx+cy*cy)/64+time);
-      int v2 = fastCosineCalc(2*x+time);
-      int v3 = fastCosineCalc(((x * fastCosineCalc(time*5)) + (y * fastCosineCalc(time*4)))/32 + time);
+        int v1 = fastCosineCalc((cx*cx+cy*cy)/64+time);
+        int v2 = fastCosineCalc(2*x+time);
+        int v3 = fastCosineCalc(((x * fastCosineCalc(time*5)) + (y * fastCosineCalc(time*4)))/32 + time);
 
-      int v = (v1+v2+v3);
+        int v = (v1+v2+v3);
 
-      uint8_t r = fastUCosineCalc(v);
-      uint8_t g = fastUCosineCalc(2*v+128);
-      uint8_t b = fastUCosineCalc(3*v+256);
-
+        r = fastUCosineCalc(v);
+        g = fastUCosineCalc(2*v+128);
+        b = fastUCosineCalc(3*v+256);
+      }
       leds.setPixel(LEDS_OFFSET + x + NBLEDS/2 , (r << 16) | (g << 8) | b);
     }
+
     leds.show();
-    time++;
+
+    if (phase == 1 && humanPositionLed > NBLEDS)
+    {
+      phase = 2;
+      humanPositionOffset = humanPosition;
+      lastPhaseChange = this->elapsed();
+    }
+    else if (phase == 2)
+    {
+      if (this->elapsed() - lastPhaseChange > _delayBetweenPhases)
+      {
+        phase = 3;
+        humanPositionOffset += humanPosition;
+      }
+    }
+    else if (phase == 3 && humanPositionLed > NBLEDS)
+    {
+      break;
+    }
+
+    time += 0.1;
     y += yinc;
-    if (y <= -120 || y >= 120) { yinc = -yinc; }
-    delay(50);
+    if (y <= -ylim || y >= ylim) { yinc = -yinc; }
   }
 }
 
