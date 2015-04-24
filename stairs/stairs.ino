@@ -28,6 +28,16 @@ OctoWS2811 leds(NBLEDS, displayMemory, drawingMemory, WS2811_GRB | WS2811_800kHz
 int chase[] = {1, 2, 4, 6, 15, 25, 35, 50};
 int worm[] = {1, 5, 10, 15, 30, 50};
 
+#ifdef TEST_MODE
+Pattern *patterns[] = {
+  new PatternWorms(
+    /*nbWorms*/ 20,
+    /*worm*/ worm,
+    /*wormLen*/ sizeof(worm) / sizeof(worm[0]),
+    /*maxSlowness*/ 8
+  )
+};
+#else
 Pattern *patterns[] = {
 //  new PatternPlain(0xFFFFFF, 2000),
   new PatternPlasma(
@@ -68,15 +78,15 @@ Pattern *patterns[] = {
     /*hueStep*/ 3
   ),
   new PatternWorms(
-    /*nbWorms*/ 15,
+    /*nbWorms*/ 20,
     /*worm*/ worm,
     /*wormLen*/ sizeof(worm) / sizeof(worm[0]),
-    /*maxSlowness*/ 10
+    /*maxSlowness*/ 8
   ),
   new PatternFireworks(
-    /*probability*/ 10,
-    /*delay*/ 15,
-    /*duration*/ 6000
+    /*delay*/ 2,
+    /*duration*/ 9000,
+    /*dimSpeed*/ 0.1
   ),
   new PatternAirport(
     /*anchorSpacing*/ 15,
@@ -89,6 +99,7 @@ Pattern *patterns[] = {
     /*delayBetweenPhases*/      2000
   )
 };
+#endif
 
 // kill useless func
 void yield()
@@ -139,6 +150,7 @@ void loop()
 
   int motionBottom, motionTop;
   int versionCounter = 0;
+  int lastChosen = -1;
   while (1)
   {
     // power-on teensy led
@@ -157,6 +169,11 @@ void loop()
     {
       // motion detected
       int chosen = random(0, nbpatterns);
+      if (chosen == lastChosen)
+      {
+        chosen = (chosen + 1) % nbpatterns;
+      }
+      lastChosen = chosen;
       dbg1("MOTION DETECTED, chosen pattern: %d", chosen);
       patterns[chosen]->run();
     }

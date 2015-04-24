@@ -4,35 +4,57 @@
 #include "globals.h"
 #include "makeColor.h"
 #include "printbuf.h"
+#include "helpers.h"
 
-PatternFireworks::PatternFireworks(int probability, unsigned int delay, unsigned long duration) :
-  _probability(probability), _delay(delay), _duration(duration)
+PatternFireworks::PatternFireworks(unsigned int delay, unsigned long duration, float dimSpeed) :
+  _delay(delay), _duration(duration), _dimSpeed(dimSpeed)
 {
-  if (probability < 1)
-  {
-    dbg1("PatternFireworks ctor: adjusting given probability (%d) to 1", probability);
-    _probability = 1;
-  }
 }
 
 void PatternFireworks::_animate()
 {
+  int8_t ledsLum[NBLEDS]  = {0};
+  int8_t ledsHue[NBLEDS]  = {0};
+  unsigned long lastLoop = 0;
+  unsigned long lastLit  = 0;
   while (this->elapsed() < this->_duration)
   {
     ++this->_iterations;
     digitalWrite(TEENSY_LED_PIN, HIGH);
-    for (int led = 0; led < NBLEDS; led++)
+    int nbLedsToLit = (this->elapsed() - lastLit) / _delay;
+    if (nbLedsToLit > 0)
     {
-      int color = 0;
-      if (random(0, this->_probability) >= this->_probability - 1)
+      lastLit = this->elapsed();
+    }
+    dbg3("wanna lit %d leds, lastLit=%lu elapsed=%lu", nbLedsToLit, lastLit, this->elapsed());
+    for (int led = 0; led < nbLedsToLit; led++)
+    {
+      // randomly lit a number of <led> leds
+      int i = findOneRandomPoweredLed(leds, POWERED_OFF, LEDS_OFFSET, 0, NBLEDS);
+      if (i >= 0)
       {
-        color = makeColor(random(0,360), 100, random(1,51));
+        ledsLum[i] = random(0, 51);
+        ledsHue[i] = random(0, 360);
+        leds.setPixel(LEDS_OFFSET + i, makeColor(ledsHue[i], 100, ledsLum[i]));
+        dbg3("powered on led %d at lum %d", i, ledsLum[i]);
       }
-      leds.setPixel(LEDS_OFFSET + led, color);
+    }
+    // now slowly dim off all leds
+    unsigned int elapsedLoop = this->elapsed() - lastLoop;
+    lastLoop = this->elapsed();
+    for (int i = 0; i < NBLEDS; i++)
+    {
+      if (leds.getPixel(LEDS_OFFSET + i) != 0x000000)
+      {
+        dbg3("dimming led %d to %d", i, ledsLum[i]);
+        ledsLum[i] -= this->_dimSpeed * elapsedLoop;
+        if (ledsLum[i] < 0) { ledsLum[i] = 0; }
+        leds.setPixel(LEDS_OFFSET + i, makeColor(ledsHue[i], 100, ledsLum[i]));
+      }
     }
     leds.show();
     digitalWrite(TEENSY_LED_PIN, LOW);
-    delay(this->_delay);
   }
 }
+
 
