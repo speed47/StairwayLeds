@@ -7,14 +7,14 @@
 class PatternFireworks : public Pattern
 {
 public:
-    PatternFireworks(int probability = 10, unsigned int delay = 15, unsigned long duration = 4000);
+    PatternFireworks(unsigned int delay = 15, unsigned long duration = 4000, float _dimSpeed = 0.5);
 
     virtual inline const char* name() { return "Fireworks"; }
 
 protected:
-    int _probability;
     unsigned int _delay; // ms
     unsigned long _duration; // ms
+    float _dimSpeed; // luminosity units/ms
 
     virtual void _animate();
 };

@@ -28,6 +28,15 @@ OctoWS2811 leds(NBLEDS, displayMemory, drawingMemory, WS2811_GRB | WS2811_800kHz
 int chase[] = {1, 2, 4, 6, 15, 25, 35, 50};
 int worm[] = {1, 5, 10, 15, 30, 50};
 
+#ifdef TEST_MODE
+Pattern *patterns[] = {
+  new PatternFireworks(
+    /*delay*/ 2,
+    /*duration*/ 9000,
+    /*dimSpeed*/ 0.1
+  )
+};
+#else
 Pattern *patterns[] = {
 //  new PatternPlain(0xFFFFFF, 2000),
   new PatternPlasma(
@@ -74,10 +83,9 @@ Pattern *patterns[] = {
     /*maxSlowness*/ 20
   ),
   new PatternFireworks(
-    /*probability*/ 10,
-    /*disintegrationDelay*/ //50,
-    /*delay*/ 15,
-    /*duration*/ 6000
+    /*delay*/ 2,
+    /*duration*/ 9000,
+    /*dimSpeed*/ 0.1
   ),
   new PatternAirport(
     /*anchorSpacing*/ 12,
@@ -90,6 +98,7 @@ Pattern *patterns[] = {
     /*delayBetweenPhases*/      2000
   )
 };
+#endif
 
 // kill useless func
 void yield()
