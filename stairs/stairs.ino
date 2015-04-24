@@ -31,7 +31,7 @@ int worm[] = {1, 5, 10, 15, 30, 50};
 Pattern *patterns[] = {
 //  new PatternPlain(0xFFFFFF, 2000),
   new PatternPlasma(
-    /*delayBetweenPhases*/ 2000,
+    /*delayBetweenPhases*/ 2000
   ),
   new PatternDissolve(
     /*delay*/ 20,
@@ -75,6 +75,7 @@ Pattern *patterns[] = {
   ),
   new PatternFireworks(
     /*probability*/ 10,
+    /*disintegrationDelay*/ //50,
     /*delay*/ 15,
     /*duration*/ 6000
   ),
