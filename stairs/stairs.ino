@@ -30,10 +30,11 @@ int worm[] = {1, 5, 10, 15, 30, 50};
 
 #ifdef TEST_MODE
 Pattern *patterns[] = {
-  new PatternFireworks(
-    /*delay*/ 2,
-    /*duration*/ 9000,
-    /*dimSpeed*/ 0.1
+  new PatternWorms(
+    /*nbWorms*/ 20,
+    /*worm*/ worm,
+    /*wormLen*/ sizeof(worm) / sizeof(worm[0]),
+    /*maxSlowness*/ 8
   )
 };
 #else
@@ -77,10 +78,10 @@ Pattern *patterns[] = {
     /*hueStep*/ 3
   ),
   new PatternWorms(
-    /*nbWorms*/ 15,
+    /*nbWorms*/ 20,
     /*worm*/ worm,
     /*wormLen*/ sizeof(worm) / sizeof(worm[0]),
-    /*maxSlowness*/ 20
+    /*maxSlowness*/ 8
   ),
   new PatternFireworks(
     /*delay*/ 2,
@@ -149,6 +150,7 @@ void loop()
 
   int motionBottom, motionTop;
   int versionCounter = 0;
+  int lastChosen = -1;
   while (1)
   {
     // power-on teensy led
@@ -167,6 +169,11 @@ void loop()
     {
       // motion detected
       int chosen = random(0, nbpatterns);
+      if (chosen == lastChosen)
+      {
+        chosen = (chosen + 1) % nbpatterns;
+      }
+      lastChosen = chosen;
       dbg1("MOTION DETECTED, chosen pattern: %d", chosen);
       patterns[chosen]->run();
     }

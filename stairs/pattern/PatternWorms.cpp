@@ -27,7 +27,7 @@ void PatternWorms::_animate()
     {
         wormsBody[w*_wormLen + i] = firstLed + (i * direction);
     }
-    wormsDirection[w] = 1;
+    wormsDirection[w] = direction;
     wormsSpeed[w] = random(0,_lowerSpeed);
     wormsHue[w]   = random(0,360);
     wormsSleep[w] = 0;
