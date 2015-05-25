@@ -18,7 +18,7 @@ protected:
     Randomizer* _colorPicker;
     Randomizer* _luminosityPicker;
 
-    virtual void _animate();
+    virtual void _animate(direction_t direction);
 };
 
 #endif

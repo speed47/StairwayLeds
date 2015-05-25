@@ -16,7 +16,7 @@ protected:
     unsigned long _duration; // ms
     float _dimSpeed; // luminosity units/ms
 
-    virtual void _animate();
+    virtual void _animate(direction_t direction);
 };
 
 #endif

@@ -19,7 +19,7 @@ protected:
     unsigned int _delay;
     int _hueStep;
 
-    virtual void _animate();
+    virtual void _animate(direction_t direction);
 };
 
 #endif

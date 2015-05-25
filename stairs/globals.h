@@ -8,6 +8,13 @@
 
 #include <stdint.h>
 #include <time.h>
+
+typedef enum
+{
+  DIRECTION_TOP_TO_BOTTOM,
+  DIRECTION_BOTTOM_TO_TOP
+} direction_t;
+
 #include "pattern/Pattern.h"
 
 /* the 4 defines below should be managed by the Makefile
@@ -51,7 +58,7 @@ but just in case, define them if they are not */
 
 /* motion detectors */
 #define BOTTOM_MOTION_DETECTOR_PIN 23
-#define    TOP_MOTION_DETECTOR_PIN 0
+#define    TOP_MOTION_DETECTOR_PIN 22
 #define MOTION_DETECTION_THRESHOLD 1000
 
 /* misc stuff */
@@ -64,6 +71,16 @@ inline void ledsClear(void)
 {
   for (int i = 0; i < NBLEDS; i++)
     leds.setPixel(LEDS_OFFSET + i, 0);
+}
+
+inline void setPix(direction_t direction, uint32_t offset, uint32_t num, int color)
+{
+  return leds.setPixel(direction == DIRECTION_BOTTOM_TO_TOP ? (offset + num) : (offset + offset - num), color);
+}
+
+inline int getPix(direction_t direction, uint32_t offset, uint32_t num)
+{
+  return leds.getPixel(direction == DIRECTION_BOTTOM_TO_TOP ? (offset + num) : (offset + offset - num));
 }
 
 inline static const char* code_version()

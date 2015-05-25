@@ -1,6 +1,8 @@
 #ifndef _PATTERN_H
 #define _PATTERN_H
 
+#include "../globals.h"
+
 class Pattern
 {
 public:
@@ -9,7 +11,7 @@ public:
 
     virtual inline const char* name() { return "Pattern"; }
     unsigned long elapsed(); // returns ms since animation started
-    virtual void run(); // main func
+    virtual void run(direction_t direction); // main func
 
 protected:
     int _ledsPerMeter;
@@ -18,7 +20,7 @@ protected:
     unsigned long _iterations;
     unsigned long _overflowAdjust;
 
-    virtual void _animate() = 0; // pure virtual, must be defined in child
+    virtual void _animate(direction_t direction) = 0; // pure virtual, must be defined in child
 };
 
 #endif

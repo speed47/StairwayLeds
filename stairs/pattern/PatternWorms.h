@@ -19,7 +19,7 @@ protected:
     int _lowerSpeed;
     unsigned int _duration;
 
-    virtual void _animate();
+    virtual void _animate(direction_t direction);
 };
 
 #endif

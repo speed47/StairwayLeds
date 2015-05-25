@@ -15,7 +15,7 @@ PatternEscalator::~PatternEscalator()
   delete this->mainHue;
 }
 
-void PatternEscalator::_animate()
+void PatternEscalator::_animate(direction_t direction)
 {
     int glowHue;
     int triggerGlow = glowOften;
@@ -56,7 +56,7 @@ void PatternEscalator::_animate()
             dbg3("phase=%d humanPositionLed=%.1f led.%d=%d", phase, humanPositionLed, i, luminosity);
           }
         }
-        leds.setPixel(LEDS_OFFSET + i, makeColor(this->mainHue->value, 100, luminosity));
+        setPix(direction, LEDS_OFFSET, i, makeColor(this->mainHue->value, 100, luminosity));
       }
       
       if (!glowing && triggerGlow-- < 0)
@@ -75,7 +75,7 @@ void PatternEscalator::_animate()
       if (glowing)
       {
         flowPosition -= glowSpeed;
-        leds.setPixel(LEDS_OFFSET +  (int)flowPosition, makeColor(glowHue, 100, glowLuminosity));
+        setPix(direction, LEDS_OFFSET,  (int)flowPosition, makeColor(glowHue, 100, glowLuminosity));
       }
       
       leds.show();

@@ -15,7 +15,7 @@ protected:
     int _color;
     unsigned int _duration;
 
-    virtual void _animate();
+    virtual void _animate(direction_t direction);
 };
 
 #endif

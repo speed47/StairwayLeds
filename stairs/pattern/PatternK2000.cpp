@@ -10,7 +10,7 @@ PatternK2000::PatternK2000(int *chase, int _chaseLen, unsigned int duration, uns
 {
 }
 
-void PatternK2000::_animate()
+void PatternK2000::_animate(direction_t direction)
 {
   int currentDirection = 1;
   int hue = random(0, 360);
@@ -41,7 +41,7 @@ void PatternK2000::_animate()
     // before advancing the tail, power off the last tail led
     // the others are either already black or will still be part
     // of the lighted leds of this step
-    leds.setPixel(LEDS_OFFSET + k[0], 0);
+    setPix(direction, LEDS_OFFSET, k[0], 0);
     
     // advance the tail
     for (int i = 0; i < _chaseLen - 1; i++)
@@ -55,7 +55,7 @@ void PatternK2000::_animate()
     // because the head must always have the last word
     for (int i = 0; i < _chaseLen; i++)
     {
-      leds.setPixel(LEDS_OFFSET + k[i], makeColor(hue, 100, _chase[i]));
+      setPix(direction, LEDS_OFFSET, k[i], makeColor(hue, 100, _chase[i]));
     }
     
     // now display

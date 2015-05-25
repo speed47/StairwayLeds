@@ -29,7 +29,7 @@ inline uint8_t fastUCosineCalc( unsigned int preWrapVal )
   return ucos_wave[preWrapVal % 512];
 }
 
-void PatternPlasma::_animate()
+void PatternPlasma::_animate(direction_t direction)
 {
   float time = random(0, 512);
 
@@ -93,7 +93,7 @@ void PatternPlasma::_animate()
         g = fastUCosineCalc(2*v+128);
         b = fastUCosineCalc(3*v+256);
       }
-      leds.setPixel(LEDS_OFFSET + x + NBLEDS/2 , (r << 16) | (g << 8) | b);
+      setPix(direction, LEDS_OFFSET, x + NBLEDS/2 , (r << 16) | (g << 8) | b);
     }
 
     leds.show();

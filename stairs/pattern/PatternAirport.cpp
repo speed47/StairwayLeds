@@ -15,7 +15,7 @@ PatternAirport::PatternAirport(int anchorSpacing, int anchorPassiveColor, int an
 {
 }
 
-void PatternAirport::_animate()
+void PatternAirport::_animate(direction_t direction)
 {
     int phase = 1;
     float humanPositionOffset = 0;
@@ -54,24 +54,24 @@ void PatternAirport::_animate()
         {
           if (humanPositionLed <= i - 1) { color = _wayColor; }
         }
-        leds.setPixel(LEDS_OFFSET + i, color);
+        setPix(direction, LEDS_OFFSET, i, color);
       }
       // second, handle anchors
       for (int i = _anchorSpacing / 2; i < NBLEDS; i += _anchorSpacing)
       {
         // this is an anchor, active or passive ?
-        leds.setPixel(LEDS_OFFSET + i, anchorActive ? _anchorActiveColor : _anchorPassiveColor);
+        setPix(direction, LEDS_OFFSET, i, anchorActive ? _anchorActiveColor : _anchorPassiveColor);
         // when passive, also sometimes
         // set -1 and +1 pixels (if not out of bounds)
         if (!anchorActive)
         {
           if (anchorLastSwitchDiff >= 100 && anchorLastSwitchDiff < 200 && i - 1 >= 0)
           {
-            leds.setPixel(LEDS_OFFSET + i - 1, _anchorNearColor);
+            setPix(direction, LEDS_OFFSET, i - 1, _anchorNearColor);
           }
           if (anchorLastSwitchDiff >= 200 && anchorLastSwitchDiff < 300 && i + 1 < NBLEDS)
           {
-            leds.setPixel(LEDS_OFFSET + i + 1, _anchorNearColor);
+            setPix(direction, LEDS_OFFSET, i + 1, _anchorNearColor);
           }
         }
       }

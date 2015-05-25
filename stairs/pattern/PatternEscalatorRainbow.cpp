@@ -10,7 +10,7 @@ PatternEscalatorRainbow::PatternEscalatorRainbow(int mainLuminosity, int delayFi
 {
 }
 
-void PatternEscalatorRainbow::_animate()
+void PatternEscalatorRainbow::_animate(direction_t direction)
 {
     int phase = 1;
     float humanPositionOffset = 0;
@@ -60,7 +60,7 @@ void PatternEscalatorRainbow::_animate()
             dbg3("phase=%d humanPos=%.1f humanPosLedTot=%.1f humanPosLed=%.1f delay=%d led.%d=%d", phase, humanPosition, humanPositionLedTotal, humanPositionLed, delayNow, i, luminosity);
           }
         }
-        leds.setPixel(LEDS_OFFSET + i, makeColor( (hue * _hueMultiplier) % 360, 100, luminosity));
+        setPix(direction, LEDS_OFFSET, i, makeColor( (hue * _hueMultiplier) % 360, 100, luminosity));
       }
       
       leds.show();

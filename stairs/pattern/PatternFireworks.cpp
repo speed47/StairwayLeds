@@ -11,7 +11,7 @@ PatternFireworks::PatternFireworks(unsigned int delay, unsigned long duration, f
 {
 }
 
-void PatternFireworks::_animate()
+void PatternFireworks::_animate(direction_t direction)
 {
   int8_t ledsLum[NBLEDS]  = {0};
   int8_t ledsHue[NBLEDS]  = {0};
@@ -30,12 +30,12 @@ void PatternFireworks::_animate()
     for (int led = 0; led < nbLedsToLit; led++)
     {
       // randomly lit a number of <led> leds
-      int i = findOneRandomPoweredLed(leds, POWERED_OFF, LEDS_OFFSET, 0, NBLEDS);
+      int i = findOneRandomPoweredLed(direction, POWERED_OFF, LEDS_OFFSET, 0, NBLEDS);
       if (i >= 0)
       {
         ledsLum[i] = random(0, 51);
         ledsHue[i] = random(0, 360);
-        leds.setPixel(LEDS_OFFSET + i, makeColor(ledsHue[i], 100, ledsLum[i]));
+        setPix(direction, LEDS_OFFSET, i, makeColor(ledsHue[i], 100, ledsLum[i]));
         dbg3("powered on led %d at lum %d", i, ledsLum[i]);
       }
     }
@@ -44,12 +44,12 @@ void PatternFireworks::_animate()
     lastLoop = this->elapsed();
     for (int i = 0; i < NBLEDS; i++)
     {
-      if (leds.getPixel(LEDS_OFFSET + i) != 0x000000)
+      if (getPix(direction, LEDS_OFFSET, i) != 0x000000)
       {
         dbg3("dimming led %d to %d", i, ledsLum[i]);
         ledsLum[i] -= this->_dimSpeed * elapsedLoop;
         if (ledsLum[i] < 0) { ledsLum[i] = 0; }
-        leds.setPixel(LEDS_OFFSET + i, makeColor(ledsHue[i], 100, ledsLum[i]));
+        setPix(direction, LEDS_OFFSET, i, makeColor(ledsHue[i], 100, ledsLum[i]));
       }
     }
     leds.show();

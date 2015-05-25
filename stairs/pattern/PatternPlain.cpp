@@ -9,11 +9,11 @@ PatternPlain::PatternPlain(int color, unsigned int duration) : _color(color), _d
 {
 }
 
-void PatternPlain::_animate()
+void PatternPlain::_animate(direction_t direction)
 {
   for (int i = 0; i < NBLEDS; i++)
   {
-    leds.setPixel(LEDS_OFFSET + i, _color);
+    setPix(direction, LEDS_OFFSET, i, _color);
   }
   ++this->_iterations;
   leds.show();

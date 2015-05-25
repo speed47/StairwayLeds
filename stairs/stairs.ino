@@ -157,16 +157,18 @@ void loop()
     digitalWrite(TEENSY_LED_PIN, HIGH);
     // read detectors
     motionBottom = analogRead(BOTTOM_MOTION_DETECTOR_PIN);
-    motionTop    = 0;//analogRead(   TOP_MOTION_DETECTOR_PIN);
+    motionTop    = analogRead(   TOP_MOTION_DETECTOR_PIN);
     // output version from time to time
-    if (versionCounter++ % 20 == 0)
+    if (versionCounter++ % 100 == 0)
     {
       dbg1("Running code version %s", code_version());
     }
 
-    dbg2("motion sensor: %d", motionBottom);
+    dbg2("motion sensors: btm=%d top=%d", motionBottom, motionTop);
     if (motionBottom > MOTION_DETECTION_THRESHOLD || motionTop > MOTION_DETECTION_THRESHOLD)
     {
+      direction_t direction = DIRECTION_BOTTOM_TO_TOP;
+      if (motionTop > MOTION_DETECTION_THRESHOLD) { direction = DIRECTION_TOP_TO_BOTTOM; }
       // motion detected
       int chosen = random(0, nbpatterns);
       if (chosen == lastChosen)
@@ -175,7 +177,7 @@ void loop()
       }
       lastChosen = chosen;
       dbg1("MOTION DETECTED, chosen pattern: %d", chosen);
-      patterns[chosen]->run();
+      patterns[chosen]->run(direction);
     }
 
     // shut all strips off
@@ -187,7 +189,7 @@ void loop()
     // just to get better pseudo random numbers when we need those:
     rand();
     // and sleep before polling for motion again
-    delay(100);
+    delay(50);
   }
 #endif
 }

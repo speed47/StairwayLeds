@@ -10,7 +10,7 @@ PatternWorms::PatternWorms(int nbWorms, int *worm, int wormLen, int lowerSpeed, 
 {
 }
 
-void PatternWorms::_animate()
+void PatternWorms::_animate(direction_t direction)
 {
   // init stuff
   int wormsDirection[_nbWorms];
@@ -73,7 +73,7 @@ void PatternWorms::_animate()
       // because the head must always have the last word
       for (int i = 0; i < _wormLen; i++)
       {
-        leds.setPixel(LEDS_OFFSET + wormsBody[w*_wormLen + i], makeColor(wormsHue[w], 100, _worm[i]));
+        setPix(direction, LEDS_OFFSET, wormsBody[w*_wormLen + i], makeColor(wormsHue[w], 100, _worm[i]));
       }
     }
     

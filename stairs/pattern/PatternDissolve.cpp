@@ -17,7 +17,7 @@ PatternDissolve::~PatternDissolve()
   delete this->_luminosityPicker;
 }
 
-void PatternDissolve::_animate()
+void PatternDissolve::_animate(direction_t direction)
 {
   int phase = 1;
   while (1)
@@ -25,7 +25,7 @@ void PatternDissolve::_animate()
     digitalWrite(TEENSY_LED_PIN, HIGH);
     ++this->_iterations;
     // choose a led to lit
-    int ledCandidate = findOneRandomPoweredLed(leds, phase == 1 ? POWERED_OFF : POWERED_ON, LEDS_OFFSET, 0, NBLEDS);
+    int ledCandidate = findOneRandomPoweredLed(direction, phase == 1 ? POWERED_OFF : POWERED_ON, LEDS_OFFSET, 0, NBLEDS);
     if (ledCandidate < 0)
     {
       // at the other extremity now ?? ok, so actually everybody is lit (or off). STOOOOOP
@@ -47,11 +47,11 @@ void PatternDissolve::_animate()
     {
       this->_colorPicker->randomize();
       this->_luminosityPicker->randomize();
-      leds.setPixel(LEDS_OFFSET + ledCandidate, makeColor(this->_colorPicker->value, 100, this->_luminosityPicker->value));
+      setPix(direction, LEDS_OFFSET, ledCandidate, makeColor(this->_colorPicker->value, 100, this->_luminosityPicker->value));
     }
     else
     {
-      leds.setPixel(LEDS_OFFSET + ledCandidate, 0x000000);
+      setPix(direction, LEDS_OFFSET, ledCandidate, 0x000000);
     }
     leds.show();
     digitalWrite(TEENSY_LED_PIN, LOW);

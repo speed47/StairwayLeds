@@ -18,7 +18,7 @@ protected:
     int _hueMultiplier;
     unsigned int _delayBetweenPhases;
 
-    virtual void _animate();
+    virtual void _animate(direction_t direction);
 };
 
 #endif
