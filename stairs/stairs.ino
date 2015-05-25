@@ -151,6 +151,7 @@ void loop()
   int motionBottom, motionTop;
   int versionCounter = 0;
   int lastChosen = -1;
+  bool seenAllOff = true;
   while (1)
   {
     // power-on teensy led
@@ -165,7 +166,12 @@ void loop()
     }
 
     dbg2("motion sensors: btm=%d top=%d", motionBottom, motionTop);
-    if (motionBottom > MOTION_DETECTION_THRESHOLD || motionTop > MOTION_DETECTION_THRESHOLD)
+    if (seenAllOff &&
+        (
+          motionBottom >= MOTION_DETECTION_THRESHOLD ||
+          motionTop    >= MOTION_DETECTION_THRESHOLD
+        )
+       )
     {
       direction_t direction = DIRECTION_BOTTOM_TO_TOP;
       if (motionTop > MOTION_DETECTION_THRESHOLD) { direction = DIRECTION_TOP_TO_BOTTOM; }
@@ -177,7 +183,19 @@ void loop()
       }
       lastChosen = chosen;
       dbg1("MOTION DETECTED, chosen pattern: %d", chosen);
+      //(void)direction;
       patterns[chosen]->run(direction);
+      seenAllOff = false;
+    }
+    if (motionBottom < MOTION_DETECTION_THRESHOLD && motionTop < MOTION_DETECTION_THRESHOLD)
+    {
+      // as PIR motion detectors keep a HIGH output for 4-5 seconds after detecting something,
+      // a corner case can happen if the previous pattern is about to end, and a motion detector
+      // sees something. by the time the pattern ends, the PIR is still in HIGH state and would
+      // trigger another pattern right after the first one, even if nobody is moving.
+      // to avoid that, we ensure we've seen at least once all detectors at LOW before triggering
+      // another pattern.
+      seenAllOff = true;
     }
 
     // shut all strips off
@@ -189,7 +207,7 @@ void loop()
     // just to get better pseudo random numbers when we need those:
     rand();
     // and sleep before polling for motion again
-    delay(50);
+    delay(100);
   }
 #endif
 }
