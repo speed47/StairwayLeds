@@ -85,7 +85,7 @@ inline int getPix(direction_t direction, uint32_t offset, uint32_t num)
 
 inline static const char* code_version()
 {
-  return "git." EXPAND2STR(GIT_REVISION) "." EXPAND2STR(GIT_BRANCH) "." EXPAND2STR(GIT_DIRTY) " (" EXPAND2STR(BUILD_TIME) ")";
+  return "git." EXPAND2STR(GIT_REVISION) "." EXPAND2STR(GIT_BRANCH) "." EXPAND2STR(GIT_DIRTY) " (" EXPAND2STR(BUILD_TIME) ") compiler v" __VERSION__;
 }
 
 #endif
