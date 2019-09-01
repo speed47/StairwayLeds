@@ -45,7 +45,7 @@ void PatternPlasma::_animate(direction_t direction)
   while (1)
   {
     ++this->_iterations;
-    dbg1("plasma running with y=%.1f", y);
+    dbg2("plasma running with y=%.1f", y);
     float humanPosition = (this->elapsed() / 1000.0 * _humanWalkingSpeed) - humanPositionOffset;
     float humanPositionLed = humanPosition * _ledsPerMeter;
     for (int i = 0, x = -(NBLEDS/2); i < NBLEDS; i++, x++)

@@ -7,7 +7,7 @@
 class PatternPlain : public Pattern
 {
 public:
-    PatternPlain(int color = 0xFFFFFF, unsigned int duration = 5000);
+    PatternPlain(int color = 0xFFFFFF, unsigned int duration = 12000);
 
     virtual inline const char* name() { return "Plain"; }
 

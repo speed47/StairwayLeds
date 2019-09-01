@@ -6,7 +6,7 @@
 class Pattern
 {
 public:
-    Pattern(int ledsPerMeter = 60, float humanWalkingSpeed = 0.95);
+    Pattern(int ledsPerMeter = 60, float humanWalkingSpeed = 0.8);
     ~Pattern();
 
     virtual inline const char* name() { return "Pattern"; }

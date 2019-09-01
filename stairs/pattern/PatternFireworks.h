@@ -7,7 +7,7 @@
 class PatternFireworks : public Pattern
 {
 public:
-    PatternFireworks(unsigned int delay = 15, unsigned long duration = 4000, float _dimSpeed = 0.5);
+    PatternFireworks(unsigned int delay = 15, unsigned long duration = 6000, float _dimSpeed = 0.5);
 
     virtual inline const char* name() { return "Fireworks"; }
 
